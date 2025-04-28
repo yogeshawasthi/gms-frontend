@@ -71,7 +71,7 @@ const Dashboard = () => {
           </div>
         </Link>
 
-        <Link to={'/specific/expire-with-in-3-days'} className='w-full h-fit border-2 bg-white rounded-lg cursor-pointer'>
+        <Link to={'/specific/expire-with-in-3-days'} onClick={() => handleOnClickMenu("threeDayExpire")} className='w-full h-fit border-2 bg-white rounded-lg cursor-pointer'>
           <div className='h-3 rounded-t-lg bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500'></div>
 
 
@@ -101,7 +101,7 @@ const Dashboard = () => {
           </div>
         </Link>
 
-        <Link to={'/specify/inactive-member'} className='w-full h-fit border-2 bg-white rounded-lg cursor-pointer'>
+        <Link to={'/specify/inactive-member'} onClick={() => handleOnClickMenu("inActiveMembers")} className='w-full h-fit border-2 bg-white rounded-lg cursor-pointer'>
           <div className='h-3 rounded-t-lg bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500'></div>
 
 
