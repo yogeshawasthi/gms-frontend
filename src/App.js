@@ -33,6 +33,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/member" element={<Member />} />
           <Route path="/specific/:page" element={<GeneralUser/>} />
+          <Route path='/specific/inactive-member' element={<GeneralUser/>} />
         </Routes>
     </div>
   );
