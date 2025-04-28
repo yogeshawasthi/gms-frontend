@@ -51,7 +51,7 @@ const Dashboard = () => {
 
 
       {/* // ths is the card block */}
-        <div className='w-full h-fit border-2 bg-white rounded-lg cursor-pointer'>
+        <Link to={'/member'} className='w-full h-fit border-2 bg-white rounded-lg cursor-pointer'>
           <div className='h-3 rounded-t-lg bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500'></div>
 
 
@@ -59,7 +59,7 @@ const Dashboard = () => {
             <PeopleAltIcon sx={{color:"green",fontSize:"50px"}} />
             <p className='text-xl my-3 font-semibold font-mono'>Joined Members</p>
           </div>
-        </div>
+        </Link>
 
         {/* this is the card block */}
         <Link to={'/specific/monthly'} onClick={() => handleOnClickMenu("monthlyJoined")} className='w-full h-fit border-2 bg-white rounded-lg cursor-pointer'>
@@ -71,7 +71,7 @@ const Dashboard = () => {
           </div>
         </Link>
 
-        <div className='w-full h-fit border-2 bg-white rounded-lg cursor-pointer'>
+        <Link to={'/specific/expire-with-in-3-days'} className='w-full h-fit border-2 bg-white rounded-lg cursor-pointer'>
           <div className='h-3 rounded-t-lg bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500'></div>
 
 
@@ -79,7 +79,7 @@ const Dashboard = () => {
             <AccessAlarmIcon sx={{color:"red",fontSize:"50px"}} />
             <p className='text-xl my-3 font-semibold font-mono'>Expiring Within 3 Days</p>
           </div>
-        </div>
+        </Link>
 
 
         <Link to={'/specific/expire-with-in-4-7-days'} onClick={() => handleOnClickMenu("fourToSevenDaysExpire")} className='w-full h-fit border-2 bg-white rounded-lg cursor-pointer'>
@@ -101,7 +101,7 @@ const Dashboard = () => {
           </div>
         </Link>
 
-        <div className='w-full h-fit border-2 bg-white rounded-lg cursor-pointer'>
+        <Link to={'/specify/inactive-member'} className='w-full h-fit border-2 bg-white rounded-lg cursor-pointer'>
           <div className='h-3 rounded-t-lg bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500'></div>
 
 
@@ -109,7 +109,7 @@ const Dashboard = () => {
             < ReportIcon sx={{color:"brown",fontSize:"50px"}} />
             <p className='text-xl my-3 font-semibold font-mono'>InActive Members</p>
           </div>
-        </div>
+        </Link>
 
       </div>
 
