@@ -33,6 +33,7 @@ const GeneralUser = () => {
 
             case "inActiveMembers":
                 setHeader("InActive Members");
+                console.log("InActive Members");
                 break;
 
             default:

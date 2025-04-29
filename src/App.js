@@ -6,6 +6,7 @@ import Home from './Pages/Home/home';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import GeneralUser from './Pages/GeneralUser/generalUser.js';
+import MemberDetail from './Pages/MemberDetail/memberDetail.js';
 
 function App() {
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/member" element={<Member />} />
           <Route path="/specific/:page" element={<GeneralUser/>} />
-          <Route path='/specific/inactive-member' element={<GeneralUser/>} />
+          <Route path="/member/:id" element={<MemberDetail/>} />
         </Routes>
     </div>
   );
