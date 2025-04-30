@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { toast, ToastContainer } from 'react-toastify';
@@ -11,6 +10,7 @@ const AddmemberShip = ({ handleClose }) => {
     const handleOnChange = (event, name) => {
         setInputField({ ...inputField, [name]: event.target.value })
     }
+    console.log(inputField)
 
     const fetchMembership = async () => {
         // .       

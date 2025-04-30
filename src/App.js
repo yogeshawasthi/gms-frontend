@@ -19,6 +19,7 @@ function App() {
       setIsLogin(true);
       // navigate("/dashboard");
     }else{
+      setIsLogin(false)
       navigate('/');
     }
   }, [sessionStorage.getItem("isLogin")]);

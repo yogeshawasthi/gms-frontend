@@ -2,11 +2,12 @@ import React, { useEffect, useState, userEffect } from "react";
 import HomeIcon from '@mui/icons-material/Home';
 import GroupIcon from '@mui/icons-material/Group';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { Link,useLocation } from "react-router-dom";
+import { Link,useLocation,useNavigate} from "react-router-dom";
 
 const Sidebar = () => {
   const [greeting, setGreeting] = useState("");
   const location = useLocation();//Get Location
+  const navigate = useNavigate();
 
 
 
@@ -19,7 +20,7 @@ const Sidebar = () => {
     } else if (currentHour < 21) {
       setGreeting("Good Evening 🌅");
     } else {
-      setGreeting("Good Knight 🌛")
+      setGreeting("Good night🌛")
     }
 
   }
@@ -29,6 +30,10 @@ const Sidebar = () => {
     greetingMessage()
   }, [])
 
+  const handleLogout = async() => { 
+    sessionStorage.clear();
+    navigate('/')
+  }       
 
   return (
     <div className="w-1/4 h-[100vh] border-2 border-blue-900 bg-black text-white p-5">
@@ -60,7 +65,7 @@ const Sidebar = () => {
 
         </Link>
 
-        <div className="flex  items-center mt-5 gap-8 font-semibold text-xl bg-slate-800  rounded-xl p-3 cursor-pointer hover:bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:text-black">
+        <div onClick={()=>{handleLogout()}} className="flex  items-center mt-5 gap-8 font-semibold text-xl bg-slate-800  rounded-xl p-3 cursor-pointer hover:bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:text-black">
           <div><LogoutIcon /></div>
           <div>Logout</div>
 
