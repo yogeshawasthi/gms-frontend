@@ -31,10 +31,8 @@ const GeneralUser = () => {
                 setHeader("Expired Members");
                 break;
 
-            case "inActiveMembers":
+            case "inActiveMember":
                 setHeader("InActive Members");
-                console.log("InActive Members");
-                break;
 
             default:
                 console.warn('No matching case for function:', func); // Debugging

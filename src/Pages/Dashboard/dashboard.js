@@ -101,7 +101,7 @@ const Dashboard = () => {
           </div>
         </Link>
 
-        <Link to={'/specify/inactive-member'} onClick={() => handleOnClickMenu("inActiveMember")}  className='w-full h-fit border-2 bg-white rounded-lg cursor-pointer'>
+        <Link to={'/specific/inactive-member'} onClick={() => handleOnClickMenu("inActiveMember")}  className='w-full h-fit border-2 bg-white rounded-lg cursor-pointer'>
           <div className='h-3 rounded-t-lg bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500'></div>
 
 
