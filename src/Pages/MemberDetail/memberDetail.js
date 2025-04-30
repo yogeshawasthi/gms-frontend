@@ -1,53 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Switch from "react-switch";
-import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 
 const MemberDetail = () => {
-  const [status, setStatus] = useState("pending");
+  const [status, setStatus] = useState("Pending");
   const [renew, setRenew] = useState(false);
-//   const [membership, setMembership] = useState([]);
-//   const [data, setData] = useState(null);
   const navigate = useNavigate();
-//   const [planMember, setPlanMember] = useState("");
-//   const { id } = useParams();
 
-//   useEffect(() => {
-//     fetchData();
-//     fetchMembership();
-//   }, []);
-
-//   const fetchMembership = async () => {
-//     // Add your API call logic here
-//   };
-
-//   const fetchData = async () => {
-//     // Add your API call logic here
-//   };
-
-  const handleSwitchBtn = async () => {
-    let statuss = status === "Active" ? "Pending" : "Active";
-    setStatus(statuss);
-    console.log(`Status changed to: ${status}`);
-    // Add your API call or additional logic here if needed
+  const handleSwitchBtn = () => {
+    let newStatus = status === "Active" ? "Pending" : "Active";
+    setStatus(newStatus);
+    console.log(`Status changed to: ${newStatus}`);
   };
-
-//   const isDateInPast = (inputDate) => {
-//     const today = new Date(); // Get the current date
-//     const givenDate = new Date(inputDate); // Convert the input to a Date object
-//     return givenDate < today; // Check if the given date is before today
-//   };
-
-//   const handleOnChangeSelect = (event) => {
-//     let value = event.target.value;
-//     setPlanMember(value);
-//   };
-
-//   const handleRenewSaveBtn = async () => {
-//     // Add your API call logic here
-//   };
 
   return (
     <div className="w-3/4 text-black p-5">
@@ -82,58 +48,37 @@ const MemberDetail = () => {
             </div>
 
             <div className="mt-1 mb-2 text-2xl font-semibold">
-              joined Date: 10-11-2025
+              Joined Date: 10-11-2025
             </div>
             <div className="mt-1 mb-2 text-2xl font-semibold">
               Next Bill Date: 10-11-2025
             </div>
 
-            {/* <div className="mt-1 mb-2 text-2xl font-semibold">
-              Joined Date :{" "}
-              {data?.createdAt?.slice(0, 10).split("-").reverse().join("-")}
-            </div>
-            <div className="mt-1 mb-2 text-2xl font-semibold">
-              Next Bill Date :{" "}
-              {data?.nextBillDate?.slice(0, 10).split("-").reverse().join("-")}
-            </div> */}
             <div className="mt-1 mb-2 flex gap-4 text-2xl font-semibold">
-              Status :
+              Status:
               <Switch
                 onColor="#6366F1"
                 checked={status === "Active"}
-                onChange={() => {
-                  handleSwitchBtn();
-                }}
+                onChange={handleSwitchBtn}
               />
             </div>
 
-
-            <div onClick={()=>{setRenew(prev => !prev)}} className={'mt-1 rounded-lg p-3 border-2 border-slate-900 text-center  ${renew && status==="active"? 'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white':null} w-full md:w-1/2 cursor-pointer hover:text-white hover:bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500'}>Renew</div>
-
-            {/* {isDateInPast(data?.nextBillDate) && (
-              <div
-                onClick={() => {
-                  if (status === "Active") {
-                    setRenew((prev) => !prev);
-                  } else {
-                    toast.error("Cannot renew while status is not Active!");
-                  }
-                }}
-                className={`mt-1 rounded-lg p-3 border-2 border-slate-900 text-center ${
-                  status === "Active"
-                    ? "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white"
-                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                } w-full md:w-1/2 cursor-pointer hover:text-white hover:bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500`}
-              >
-                Renew
-              </div>
-            )} */}
-
-            {/* {renew && status === "Active" ? ( */}
-              {/* <div> */}
-                {/* Add your renew logic here */}
-              {/* </div> */}
-            {/* ) : null} */}
+            <div
+              onClick={() => {
+                if (status === "Active") {
+                  setRenew((prev) => !prev);
+                } else {
+                  toast.error("Cannot renew while status is not Active!");
+                }
+              }}
+              className={`mt-1 rounded-lg p-3 border-2 border-slate-900 text-center ${
+                status === "Active"
+                  ? "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white"
+                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+              } w-full md:w-1/2 cursor-pointer hover:text-white hover:bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500`}
+            >
+              Renew
+            </div>
           </div>
         </div>
       </div>
