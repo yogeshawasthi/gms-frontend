@@ -6,11 +6,11 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 
 const MemberDetail = () => {
-//   const [status, setStatus] = useState("Pending");
-//   const [renew, setRenew] = useState(false);
+  const [status, setStatus] = useState("pending");
+  const [renew, setRenew] = useState(false);
 //   const [membership, setMembership] = useState([]);
 //   const [data, setData] = useState(null);
-//   const navigate = useNavigate();
+  const navigate = useNavigate();
 //   const [planMember, setPlanMember] = useState("");
 //   const { id } = useParams();
 
@@ -28,9 +28,9 @@ const MemberDetail = () => {
 //   };
 
   const handleSwitchBtn = async () => {
-    let newStatus = status === "Active" ? "Pending" : "Active";
-    setStatus(newStatus);
-    console.log(`Status changed to: ${newStatus}`);
+    let statuss = status === "Active" ? "Pending" : "Active";
+    setStatus(statuss);
+    console.log(`Status changed to: ${status}`);
     // Add your API call or additional logic here if needed
   };
 
@@ -82,15 +82,22 @@ const MemberDetail = () => {
             </div>
 
             <div className="mt-1 mb-2 text-2xl font-semibold">
+              joined Date: 10-11-2025
+            </div>
+            <div className="mt-1 mb-2 text-2xl font-semibold">
+              Next Bill Date: 10-11-2025
+            </div>
+
+            {/* <div className="mt-1 mb-2 text-2xl font-semibold">
               Joined Date :{" "}
               {data?.createdAt?.slice(0, 10).split("-").reverse().join("-")}
             </div>
             <div className="mt-1 mb-2 text-2xl font-semibold">
               Next Bill Date :{" "}
               {data?.nextBillDate?.slice(0, 10).split("-").reverse().join("-")}
-            </div>
+            </div> */}
             <div className="mt-1 mb-2 flex gap-4 text-2xl font-semibold">
-              Status :{" "}
+              Status :
               <Switch
                 onColor="#6366F1"
                 checked={status === "Active"}
@@ -100,7 +107,10 @@ const MemberDetail = () => {
               />
             </div>
 
-            {isDateInPast(data?.nextBillDate) && (
+
+            <div onClick={()=>{setRenew(prev => !prev)}} className={'mt-1 rounded-lg p-3 border-2 border-slate-900 text-center  ${renew && status==="active"? 'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white':null} w-full md:w-1/2 cursor-pointer hover:text-white hover:bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500'}>Renew</div>
+
+            {/* {isDateInPast(data?.nextBillDate) && (
               <div
                 onClick={() => {
                   if (status === "Active") {
@@ -117,13 +127,13 @@ const MemberDetail = () => {
               >
                 Renew
               </div>
-            )}
+            )} */}
 
-            {renew && status === "Active" ? (
-              <div>
+            {/* {renew && status === "Active" ? ( */}
+              {/* <div> */}
                 {/* Add your renew logic here */}
-              </div>
-            ) : null}
+              {/* </div> */}
+            {/* ) : null} */}
           </div>
         </div>
       </div>
