@@ -3,6 +3,9 @@ import './signUp.css';
 import Modal from '../../Modal/modal';
 import ForgotPassword from '../../Forgotpassword/forgotPassword';
 import axios from 'axios'
+import Stack from '@mui/material/Stack';
+import LinearProgress from '@mui/material/LinearProgress';
+
 
 const SignUp = () => {
     const [forgotPassword, setForgotPassword] = useState(false);
@@ -14,6 +17,8 @@ const SignUp = () => {
         profilepic: "https://img.freepik.com/free-photo/low-angle-view-unrecognizable-muscular-build-man-preparing-lifting-barbell-health-club_637285-2497.jpg?t=st=1744370811~exp=1744374411~hmac=23008917d736bff1e1ab8072d9f52cb4554ac273bf45b657494358edc3de82c3&w=1380"
     });
 
+    const [loaderImage, setLoaderImage] = useState(false);
+
     const handleOnChange = (event, name) => {
         setInputField({ ...inputField, [name]: event.target.value });
     };
@@ -23,27 +28,30 @@ const SignUp = () => {
         setForgotPassword((prev) => !prev);
     };
 
-   const uploadImage =async(event)=>{
-    
-    console.log("Image Uploading")
-    const files = event.target.files;
-    const data = new FormData();
-    data.append('file',files[0]);
+    const uploadImage = async (event) => {
+        setLoaderImage(true)
+        console.log("Image Uploading")
+        const files = event.target.files;
+        const data = new FormData();
+        data.append('file', files[0]);
 
-    // dnbtfydel
+        // dnbtfydel
 
-    data.append('upload_preset','gym-management');
+        data.append('upload_preset', 'gym-management');
 
-    try{
-        const response = await axios.post("https://api.cloudinary.com/v1_1/dnbtfydel/image/upload", data);
-        console.log(response)
-        const imageUrl = response.data.url;
-        setInputField({...inputField,['profilepic']:imageUrl})
-    }catch(err){
-        console.log(err)
+        try {
+            const response = await axios.post("https://api.cloudinary.com/v1_1/dnbtfydel/image/upload", data);
+            console.log(response)
+            const imageUrl = response.data.url;
+            setLoaderImage(false)
+
+            setInputField({ ...inputField, ['profilepic']: imageUrl })
+        } catch (err) {
+            console.log(err)
+            setLoaderImage(false)
+        }
+
     }
-
-   }
 
 
 
@@ -78,7 +86,13 @@ const SignUp = () => {
                 className='w-full mb-10 p-2 rounded-lg'
                 placeholder='Enter Password'
             />
-            <input type='file' onChange={(e)=>{uploadImage(e)}} className='w-full mb-6 p-2 rounded-lg' />
+            <input type='file' onChange={(e) => { uploadImage(e) }} className='w-full mb-6 p-2 rounded-lg' />
+            {
+                loaderImage && <Stack sx={{ width: '100%', color: 'grey.500' }} spacing={2}>
+                    <LinearProgress color="secondary" />
+                </Stack>
+            }
+
             <img src={inputField.profilepic} alt="Profile" />
             <div className='p-2 w-[80%] border-2 bg-slate-800 mx-auto rounded-lg text-white text-center text-lg hover:bg-white hover:text-black font-semibold cursor-pointer'>
                 Register

@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 
+import Stack from '@mui/material/Stack';
+import LinearProgress from '@mui/material/LinearProgress';
+
 const Addmembers = () => {
   const [inputField, setInputField] = useState({
     name: '',
@@ -19,7 +22,7 @@ const Addmembers = () => {
     setInputField({ ...inputField, [name]: event.target.value });
   };
 
- 
+
   const fetchMembership = async () => {
     try {
       const response = await axios.get('http://localhost:4000/plans/get-membership', {
@@ -54,27 +57,30 @@ const Addmembers = () => {
     }
   };
 
-  const uploadImage =async(event)=>{
-    
+  const uploadImage = async (event) => {
+    setImageLoader(true);
+
     console.log("Image Uploading")
     const files = event.target.files;
     const data = new FormData();
-    data.append('file',files[0]);
+    data.append('file', files[0]);
 
     // dnbtfydel
 
-    data.append('upload_preset','gym-management');
+    data.append('upload_preset', 'gym-management');
 
-    try{
-        const response = await axios.post("https://api.cloudinary.com/v1_1/dnbtfydel/image/upload", data);
-        console.log(response)
-        const imageUrl = response.data.url;
-        setInputField({...inputField,['profilePic']:imageUrl})
-    }catch(err){
-        console.log(err)
+    try {
+      const response = await axios.post("https://api.cloudinary.com/v1_1/dnbtfydel/image/upload", data);
+      console.log(response)
+      const imageUrl = response.data.url;
+      setInputField({ ...inputField, ['profilePic']: imageUrl })
+      setImageLoader(false)
+    } catch (err) {
+      console.log(err)
+      setImageLoader(false)
     }
 
-   }
+  }
 
 
   return (
@@ -122,10 +128,17 @@ const Addmembers = () => {
             <option disabled>No Membership Plans Available</option>
           )}
         </select>
-        <input type="file" onChange={(e)=>uploadImage(e)} />
+        <input type="file" onChange={(e) => uploadImage(e)} />
         <div className="w-[100px] h-[100px]">
           <img src={inputField.profilePic} alt="Profile" className="w-full h-full rounded-full border border-pink-950" />
+          {
+                imageLoader && <Stack sx={{ width: '100%', color: 'grey.500' }} spacing={2}>
+                    <LinearProgress color="secondary" />
+                </Stack>
+            }
+
         </div>
+
       </div>
       <button
         onClick={handleRegisterButton}
