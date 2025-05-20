@@ -15,8 +15,15 @@ const Login = () => {
         //     alert("Please enter both username and password.");
         // }
 
-        await axios.post("http://localhost:4000/auth/login",loginField,{withCredentials:true}).then((resp)=>{
-            console.log(resp);
+        await axios.post("http://localhost:4000/auth/login",loginField,{withCredentials:true}).then((response)=>{
+            console.log(response.data);
+            localStorage.setItem('gymName',response.data.gym.gymName);
+            localStorage.setItem('gymPic',response.data.gym.profilePic);
+            localStorage.setItem('isLogin',true);
+            localStorage.setItem('token',response.data.token);
+
+            navigate("/dashboard");
+
         }).catch(err=>{
             const errorMessage = err.response.data.error;
             // console.log(errorMessage);

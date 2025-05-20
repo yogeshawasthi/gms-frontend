@@ -27,7 +27,7 @@ const Dashboard = () => {
   }, [accordianDashboard])
 
   const handleOnClickMenu = (value) => {
-    sessionStorage.setItem('func', value);
+    localStorage.setItem('func', value);
   }
 
   return (

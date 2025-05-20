@@ -16,7 +16,7 @@ function App() {
   const [isLogin, setIsLogin] = useState(false);
 
   useEffect(() => {
-    let isLogedIn = sessionStorage.getItem("isLogin");
+    let isLogedIn = localStorage.getItem("isLogin");
     if (isLogedIn) {
       setIsLogin(true);
       // navigate("/dashboard");
@@ -24,7 +24,7 @@ function App() {
       setIsLogin(false)
       navigate('/');
     }
-  }, [sessionStorage.getItem("isLogin")]);
+  }, [localStorage.getItem("isLogin")]);
 
   return (
     <div className="flex ">
