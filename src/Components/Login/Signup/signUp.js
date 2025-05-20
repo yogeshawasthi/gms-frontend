@@ -22,7 +22,6 @@ const SignUp = () => {
     const handleOnChange = (event, name) => {
         setInputField({ ...inputField, [name]: event.target.value });
     };
-    console.log(inputField);
 
     const handleClose = () => {
         setForgotPassword((prev) => !prev);

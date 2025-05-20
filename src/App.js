@@ -7,6 +7,8 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import GeneralUser from './Pages/GeneralUser/generalUser.js';
 import MemberDetail from './Pages/MemberDetail/memberDetail.js';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function App() {
   const navigate = useNavigate();
