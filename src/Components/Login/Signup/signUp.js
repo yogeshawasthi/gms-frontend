@@ -82,7 +82,7 @@ const SignUp = () => {
                 value={inputField.gymName}
                 onChange={(event) => handleOnChange(event, "gymName")}
                 className='w-full mb-10 p-2 rounded-lg'
-                placeholder='Enter Gym Name'
+                placeholder='Enter Gym Name '
             />
             <input
                 type='text'
