@@ -5,6 +5,7 @@ import ForgotPassword from '../../Forgotpassword/forgotPassword';
 import axios from 'axios'
 import Stack from '@mui/material/Stack';
 import LinearProgress from '@mui/material/LinearProgress';
+import { toast, ToastContainer } from 'react-toastify';
 
 
 const SignUp = () => {
@@ -14,7 +15,7 @@ const SignUp = () => {
         userName: "",
         password: "",
         email: "",
-        profilepic: "https://img.freepik.com/free-photo/low-angle-view-unrecognizable-muscular-build-man-preparing-lifting-barbell-health-club_637285-2497.jpg?t=st=1744370811~exp=1744374411~hmac=23008917d736bff1e1ab8072d9f52cb4554ac273bf45b657494358edc3de82c3&w=1380"
+        profilePic: "https://img.freepik.com/free-photo/low-angle-view-unrecognizable-muscular-build-man-preparing-lifting-barbell-health-club_637285-2497.jpg?t=st=1744370811~exp=1744374411~hmac=23008917d736bff1e1ab8072d9f52cb4554ac273bf45b657494358edc3de82c3&w=1380"
     });
 
     const [loaderImage, setLoaderImage] = useState(false);
@@ -49,6 +50,17 @@ const SignUp = () => {
             console.log(err)
             setLoaderImage(false)
         }
+
+    }
+
+    const handleRegister = async () =>{
+        await axios.post("http://localhost:4000/auth/register",inputField).then((resp)=>{
+            console.log(resp);
+        }).catch(err=>{
+                    const errorMessage = err.response.data.error;
+                    // console.log(errorMessage);
+                    toast.error(errorMessage)
+                })
 
     }
 
@@ -93,7 +105,7 @@ const SignUp = () => {
             }
 
             <img src={inputField.profilepic} alt="Profile" />
-            <div className='p-2 w-[80%] border-2 bg-slate-800 mx-auto rounded-lg text-white text-center text-lg hover:bg-white hover:text-black font-semibold cursor-pointer'>
+            <div className='p-2 w-[80%] border-2 bg-slate-800 mx-auto rounded-lg text-white text-center text-lg hover:bg-white hover:text-black font-semibold cursor-pointer' onClick={()=>handleRegister()}>
                 Register
             </div>
             <div
@@ -109,6 +121,7 @@ const SignUp = () => {
                     content={<ForgotPassword />}
                 />
             )}
+            <ToastContainer/>
         </div>
     );
 };

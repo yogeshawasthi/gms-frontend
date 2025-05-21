@@ -8,8 +8,8 @@ const GeneralUser = () => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        const func = sessionStorage.getItem('func');
-        console.log('Function retrieved from sessionStorage:', func); // Debugging
+        const func = localStorage.getItem('func');
+        console.log('Function retrieved from localStorage:', func); // Debugging
         functionCall(func);
     }, []);
 
