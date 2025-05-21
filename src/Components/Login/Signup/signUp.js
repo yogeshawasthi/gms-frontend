@@ -45,7 +45,7 @@ const SignUp = () => {
             const imageUrl = response.data.url;
             setLoaderImage(false)
 
-            setInputField({ ...inputField, ['profilepic']: imageUrl })
+            setInputField({ ...inputField, profilePic: imageUrl })
         } catch (err) {
             console.log(err)
             setLoaderImage(false)
@@ -53,15 +53,16 @@ const SignUp = () => {
 
     }
 
-    const handleRegister = async () =>{
-        await axios.post("http://localhost:4000/auth/register",inputField).then((resp)=>{
-            console.log(resp);
-        }).catch(err=>{
-                    const errorMessage = err.response.data.error;
-                    // console.log(errorMessage);
-                    toast.error(errorMessage)
-                })
-
+    const handleRegister = async () => {
+        await axios.post("http://localhost:4000/auth/register", inputField)
+            .then((resp) => {
+                const successMsg = resp.data.message;
+                toast.success(successMsg);
+            })
+            .catch(err => {
+                const errorMessage = err.response?.data?.error || "Registration failed";
+                toast.error(errorMessage);
+            });
     }
 
 
@@ -104,7 +105,7 @@ const SignUp = () => {
                 </Stack>
             }
 
-            <img src={inputField.profilepic} alt="Profile" />
+            <img src={inputField.profilePic} alt="Profile" />
             <div className='p-2 w-[80%] border-2 bg-slate-800 mx-auto rounded-lg text-white text-center text-lg hover:bg-white hover:text-black font-semibold cursor-pointer' onClick={()=>handleRegister()}>
                 Register
             </div>
