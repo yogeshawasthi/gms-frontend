@@ -1,20 +1,29 @@
 import React, { useState } from 'react';
+import Loader from '../Loader/loader';
+import axios  from 'axios'; 
+
 
 const ForgotPassword = () => {
     const [emailSubmit, setEmailSubmit] = useState(false);
     const [otpValidate, setOtpValidate] = useState(false);
     const [contentVal, setContentvalue] = useState("Submit Your Email");
     const [inputField, setInputField] = useState({ email: "", otp: "", newPassword: "" });
+    const [loader,setLoader] = useState(false);
 
     const handleSubmit = () => {
         if (!emailSubmit) {
-            setEmailSubmit(true);
-            setContentvalue("Submit Your OTP");
+            // setEmailSubmit(true);
+            // setContentvalue("Submit Your OTP");
+
+            sendOtp();
+
         } else if (emailSubmit && !otpValidate) {
-            setOtpValidate(true);
-            setContentvalue("Submit Your New Password");
+            // setOtpValidate(true);
+            // setContentvalue("Submit Your New Password");
         }
     };
+
+    const sendOtp
 
     const handleOnChange = (event, name) => {
         setInputField({ ...inputField, [name]: event.target.value });
@@ -64,6 +73,7 @@ const ForgotPassword = () => {
             >
                 {contentVal}
             </div>
+           {loader && <Loader/>}
         </div>
     );
 };
