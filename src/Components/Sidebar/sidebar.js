@@ -37,13 +37,13 @@ const Sidebar = () => {
 
   return (
     <div className="w-1/4 h-[100vh] border-2 border-blue-900 bg-black text-white p-5">
-      <div className="text-center  text-3xl font-extralight">Planet Fitness</div>
+      <div className="text-center  text-3xl font-extralight">{localStorage.getItem('gymName')}</div>
       <div className="flex  gap-5 my-5">
         <div className="w-[100px] h-[100px] rounded-lg overflow-hidden ">
           <img
             alt="gym pics"
             className="w-full h-full rounded-full"
-            src="https://i.pinimg.com/736x/82/36/1c/82361ce6f01ab043ffac62fb2d455f7c.jpg"
+            src={localStorage.getItem('gymPic') }
           />
         </div>
 

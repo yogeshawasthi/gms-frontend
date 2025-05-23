@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Loader from '../Loader/loader';
 import axios  from 'axios'; 
+import { toast,ToastContainer } from 'react-toastify'; // toast container is being used to show the success and error messages
 
 
 const ForgotPassword = () => {
@@ -12,18 +13,60 @@ const ForgotPassword = () => {
 
     const handleSubmit = () => {
         if (!emailSubmit) {
-            // setEmailSubmit(true);
-            // setContentvalue("Submit Your OTP");
 
             sendOtp();
 
         } else if (emailSubmit && !otpValidate) {
-            // setOtpValidate(true);
-            // setContentvalue("Submit Your New Password");
+            verifyOtp();
+        }else{
+            changePassword();
         }
     };
 
-    const sendOtp
+
+    const changePassword = async () => {
+        setLoader(true);   
+        await axios.post("http://localhost:4000/auth/reset-password", { email: inputField.email, newPassword: inputField.newPassword }).then((response) => {
+            toast.success(response.data.message);
+            setLoader(false);
+        }).catch((err) => {
+            toast.error("some Techinal Error Occured");
+            console.log(err);
+            setLoader(false);
+        });
+    }
+
+
+    const sendOtp = async   () => {
+        setLoader(true);
+
+        await axios.post("http://localhost:4000/auth/reset-password/sendOtp", { email: inputField.email }).then((response) => {
+             setEmailSubmit(true);
+            setContentvalue("Submit Your OTP");
+            toast.success(response.data.message);
+            setLoader(false);
+
+        }).catch((err) => {
+            toast.error("some Techinal Error Occured");
+            console.log(err);
+            setLoader(false); 
+        });   
+    }
+    
+
+    const verifyOtp = async () => {
+        setLoader(true);
+        await axios.post("http://localhost:4000/auth/reset-password/checkOtp", { email: inputField.email, otp: inputField.otp }).then((response) => {
+            setOtpValidate(true);
+            setContentvalue("Submit Your New Password");
+            toast.success(response.data.message);
+            setLoader(false);
+        }).catch((err) => {
+            toast.error("some Techinal Error Occured");
+            console.log(err);
+            setLoader(false);
+        });
+    };
 
     const handleOnChange = (event, name) => {
         setInputField({ ...inputField, [name]: event.target.value });
@@ -74,6 +117,7 @@ const ForgotPassword = () => {
                 {contentVal}
             </div>
            {loader && <Loader/>}
+           <ToastContainer/>
         </div>
     );
 };
