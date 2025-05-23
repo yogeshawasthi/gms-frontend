@@ -5,7 +5,7 @@ import ForgotPassword from '../../Forgotpassword/forgotPassword';
 import axios from 'axios'
 import Stack from '@mui/material/Stack';
 import LinearProgress from '@mui/material/LinearProgress';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';// toast container is being used to show the success and error messages
 
 
 const SignUp = () => {
