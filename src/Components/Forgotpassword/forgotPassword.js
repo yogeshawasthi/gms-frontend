@@ -42,7 +42,7 @@ const ForgotPassword = () => {
 
         await axios.post("http://localhost:4000/auth/reset-password/sendOtp", { email: inputField.email }).then((response) => {
              setEmailSubmit(true);
-            setContentvalue("Submit Your OTP");
+            setContentvalue("Submit Your OTP ");
             toast.success(response.data.message);
             setLoader(false);
 
