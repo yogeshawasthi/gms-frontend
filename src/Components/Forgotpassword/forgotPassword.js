@@ -47,7 +47,7 @@ const ForgotPassword = () => {
             setLoader(false);
 
         }).catch((err) => {
-            toast.error("some Techinal Error Occured");
+            toast.error("some Techdinal Error Occured");
             console.log(err);
             setLoader(false); 
         });   
