@@ -94,7 +94,7 @@ const ForgotPassword = () => {
                         value={inputField.otp}
                         onChange={(e) => handleOnChange(e, "otp")}
                         className='w-1/2 p-2 rounded-lg border-2 border-slate-400'
-                        placeholder='Enter OTP'
+                        placeholder='Enter OTP '
                     />
                 </div>
             )}
