@@ -58,7 +58,7 @@ const ForgotPassword = () => {
         setLoader(true);
         await axios.post("http://localhost:4000/auth/reset-password/checkOtp", { email: inputField.email, otp: inputField.otp }).then((response) => {
             setOtpValidate(true);
-            setContentvalue("Submit Your New Password");
+            setContentvalue("Submit Yodur New Password");
             toast.success(response.data.message);
             setLoader(false);
         }).catch((err) => {
