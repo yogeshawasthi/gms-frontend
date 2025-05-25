@@ -83,7 +83,7 @@ const ForgotPassword = () => {
                     value={inputField.email}
                     onChange={(e) => handleOnChange(e, "email")}
                     className='w-1/2 p-2 rounded-lg border-2 border-slate-400'
-                    placeholder='Enter Email'
+                    placeholder='Enter Email '
                 />
             </div>
             {emailSubmit && (
