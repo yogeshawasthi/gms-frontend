@@ -33,12 +33,14 @@ const AddmemberShip = ({ handleClose }) => {
     }, [])
 
     const handleAddmembership = async () => {
-        // .       
-        // .
-        // Please Watch the youtube video for full code 
-        // .
-        // .
-        // .
+        try {
+            const response = await axios.post('http://localhost:4000/plans/add-membership', inputField, { withCredentials: true });
+            console.log(response);
+            fetchMembership(); // Refresh the list
+        } catch (err) {
+            console.log(err);
+            toast.error("Something wrong Happen");
+        }
     }
 
     return (
