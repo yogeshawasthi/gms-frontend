@@ -5,7 +5,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import Stack from '@mui/material/Stack';
 import LinearProgress from '@mui/material/LinearProgress';
 
-const Addmembers = ({}) => {
+
+const Addmembers = ({ }) => {
   const [inputField, setInputField] = useState({
     name: '',
     mobileNo: '',
@@ -29,10 +30,21 @@ const Addmembers = ({}) => {
     })
       .then((response) => {
         setMembershipList(response.data.membership);
-        toast.success(`${response.data.membership.length} Memberships Fetched`, {
-          toastId: 'membership-fetch-success',
-        });
-        console.log(response.data);
+        if (response.data.length == 0) {
+          toast.error("No any Membership added yet", {
+            className: "text-lg"
+          });
+        } else {
+
+
+
+          let a = response.data.membership[0]._id;
+          setSelectedOption(a)
+          setInputField({...inputField,membership:a})
+
+
+        }
+
       })
       .catch((err) => {
         console.error(err);
@@ -69,7 +81,12 @@ const Addmembers = ({}) => {
 
     try {
       // Add your registration logic here
-      console.log('Registering member:', inputField);
+      await axios.post('http://localhost:4000/members/register-member', inputField, { withCredentials: true }).then((res) => {
+        toast.success("Added Successfully");
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      });
     } catch (err) {
       console.error(err);
       toast.error('Something went wrong during registration');
@@ -151,10 +168,10 @@ const Addmembers = ({}) => {
         <div className="w-[100px] h-[100px]">
           <img src={inputField.profilePic} alt="Profile" className="w-full h-full rounded-full border border-pink-950" />
           {
-                imageLoader && <Stack sx={{ width: '100%', color: 'grey.500' }} spacing={2}>
-                    <LinearProgress color="secondary" />
-                </Stack>
-            }
+            imageLoader && <Stack sx={{ width: '100%', color: 'grey.500' }} spacing={2}>
+              <LinearProgress color="secondary" />
+            </Stack>
+          }
 
         </div>
 
