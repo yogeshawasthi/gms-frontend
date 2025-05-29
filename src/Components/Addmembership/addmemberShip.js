@@ -35,7 +35,8 @@ const AddmemberShip = ({ handleClose }) => {
     const handleAddmembership = async () => {
         try {
             const response = await axios.post('http://localhost:4000/plans/add-membership', inputField, { withCredentials: true });
-            console.log(response);
+            toast.success(response.data.message)
+            handleClose();
             fetchMembership(); // Refresh the list
         } catch (err) {
             console.log(err);

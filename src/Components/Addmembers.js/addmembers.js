@@ -5,7 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import Stack from '@mui/material/Stack';
 import LinearProgress from '@mui/material/LinearProgress';
 
-const Addmembers = ({handleClose}) => {
+const Addmembers = ({}) => {
   const [inputField, setInputField] = useState({
     name: '',
     mobileNo: '',
@@ -24,15 +24,20 @@ const Addmembers = ({handleClose}) => {
 
 
   const fetchMembership = async () => {
-    try {
-      const response = await axios.get('http://localhost:4000/plans/get-membership', {
-        withCredentials: true,
+    await axios.get('http://localhost:4000/plans/getMembership', {
+      withCredentials: true,
+    })
+      .then((response) => {
+        setMembershipList(response.data.membership);
+        toast.success(`${response.data.membership.length} Memberships Fetched`, {
+          toastId: 'membership-fetch-success',
+        });
+        console.log(response.data);
+      })
+      .catch((err) => {
+        console.error(err);
+        toast.error('Error fetching membership details');
       });
-      setMembershipList(response.data);
-    } catch (err) {
-      console.error(err);
-      toast.error('Something went wrong while fetching membership plans');
-    }
   };
 
   useEffect(() => {
