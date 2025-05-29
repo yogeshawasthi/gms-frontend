@@ -53,6 +53,20 @@ const Addmembers = ({}) => {
   console.log(inputField)
 
   const handleRegisterButton = async () => {
+    // Calculate age from DOB
+    const dob = new Date(inputField.joiningDate);
+    const today = new Date();
+    let age = today.getFullYear() - dob.getFullYear();
+    const m = today.getMonth() - dob.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+      age--;
+    }
+
+    if (age < 18) {
+      toast.error("You must be at least 18 years old to register for the gym.");
+      return;
+    }
+
     try {
       // Add your registration logic here
       console.log('Registering member:', inputField);
