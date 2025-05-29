@@ -5,7 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import Stack from '@mui/material/Stack';
 import LinearProgress from '@mui/material/LinearProgress';
 
-const Addmembers = () => {
+const Addmembers = ({handleClose}) => {
   const [inputField, setInputField] = useState({
     name: '',
     mobileNo: '',
