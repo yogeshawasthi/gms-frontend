@@ -64,7 +64,7 @@ const Addmembers = ({ }) => {
 
   console.log(inputField)
 
-  const handleRegisterButton = async () => {
+   const handleRegisterButton = async () => {
     // Calculate age from DOB
     const dob = new Date(inputField.joiningDate);
     const today = new Date();
@@ -92,6 +92,7 @@ const Addmembers = ({ }) => {
       toast.error('Something went wrong during registration');
     }
   };
+  
 
   const uploadImage = async (event) => {
     setImageLoader(true);
