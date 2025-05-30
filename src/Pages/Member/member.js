@@ -132,11 +132,11 @@ const Member = () => {
 
       <div className='bg-slate-100 p-5 mt-5 rounded-lg grid gap-2 grid-cols-3 overflow-x-auto h-[65%]'>
 
-       {
-        data.map((item, index) =>{
-           <MemberCard />
-        })
-       }
+      {
+        data.map((item, index) => (
+          <MemberCard key={item._id || index} item={item} />
+        ))
+      }
        
 
       </div>
