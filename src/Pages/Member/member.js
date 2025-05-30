@@ -11,11 +11,13 @@ import Modal from '../../Components/Modal/modal';
 import ForgotPassword from '../../Components/Forgotpassword/forgotPassword';
 import AddmemberShip from '../../Components/Addmembership/addmemberShip';
 import Addmembers from '../../Components/Addmembers.js/addmembers';
+import axios from 'axios';
 
 
 const Member = () => {
   const [addMemberShip, setAddmemberShip] = useState(false);
   const [addMember, setAddmember] = useState(false)
+  const [data, setData] = useState([]);
 
   const [currentPage,setCurrentPage] = useState(1);
   
@@ -29,15 +31,21 @@ const Member = () => {
   const [noOfPage, setNoOfPage] = useState(0);
 
   useEffect(()=>{
-      fetchData();
+      fetchData(0,9);
 
 
   },[])
 
-  const fetchData=()=>{
+  const fetchData=async(skip,limits)=>{
+    // Fetching members data from the server
+    await axios.get(`http://localhost:4000/members/all-member?skip=${skip}&limit=${limits}`, {
+      withCredentials: true,
+    }).then((response) => {
+      console.log(response.data); 
 
-      let totalData = 54 ;
+      let totalData = response.data.totalMembers ;
       setTotalData(totalData);
+      setData(response.data.members);
 
 
       let extraPage = totalData%limit===0?0:1 ;
@@ -52,7 +60,7 @@ const Member = () => {
         setSTartFrom(0);
         setEndTo(totalData);
       }
-
+    })
   }
 
 
@@ -124,15 +132,22 @@ const Member = () => {
 
       <div className='bg-slate-100 p-5 mt-5 rounded-lg grid gap-2 grid-cols-3 overflow-x-auto h-[65%]'>
 
-        <MemberCard />
-        <MemberCard />
-        <MemberCard />
-        <MemberCard />
-        <MemberCard />
-        <MemberCard />
-        <MemberCard />
-        <MemberCard />
-        <MemberCard />
+       {
+        data.map((item, index) => {
+          return (
+            <MemberCard
+              key={index}
+              name={item.name}
+              mobileNo={item.mobileNo}
+              address={item.address}
+              joiningDate={item.joiningDate}
+              profilePic={item.profilePic}
+              membership={item.membership ? item.membership.months : "No Membership"}
+            />
+          )
+        })
+       }
+       
 
       </div>
       {addMemberShip && (
