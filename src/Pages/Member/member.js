@@ -133,18 +133,8 @@ const Member = () => {
       <div className='bg-slate-100 p-5 mt-5 rounded-lg grid gap-2 grid-cols-3 overflow-x-auto h-[65%]'>
 
        {
-        data.map((item, index) => {
-          return (
-            <MemberCard
-              key={index}
-              name={item.name}
-              mobileNo={item.mobileNo}
-              address={item.address}
-              joiningDate={item.joiningDate}
-              profilePic={item.profilePic}
-              membership={item.membership ? item.membership.months : "No Membership"}
-            />
-          )
+        data.map((item, index) =>{
+           <MemberCard />
         })
        }
        
