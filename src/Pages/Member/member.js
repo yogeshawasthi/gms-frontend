@@ -12,12 +12,16 @@ import ForgotPassword from '../../Components/Forgotpassword/forgotPassword';
 import AddmemberShip from '../../Components/Addmembership/addmemberShip';
 import Addmembers from '../../Components/Addmembers.js/addmembers';
 import axios from 'axios';
+import { ToastContainer,toast } from 'react-toastify';
 
 
 const Member = () => {
   const [addMemberShip, setAddmemberShip] = useState(false);
   const [addMember, setAddmember] = useState(false)
   const [data, setData] = useState([]);
+  const [skip,setSkip] = useState(0);
+  const[search,setSearch] = useState("")
+  const [isSearchModeOn,setIsSearchModeOn] = useState(false);
 
   const [currentPage,setCurrentPage] = useState(1);
   
@@ -60,6 +64,9 @@ const Member = () => {
         setSTartFrom(0);
         setEndTo(totalData);
       }
+    }).catch(err=>{
+      toast.error("Something Technical Fault")
+      console.log(err)
     })
   }
 
@@ -81,6 +88,9 @@ const Member = () => {
       var to = (currPage*9);
       setSTartFrom(from)
       setEndTo(to);
+      let skipValue = skip-9
+      setSkip(skipValue);
+      fetchData(skipValue,9);
     }
   }
 
@@ -96,9 +106,23 @@ const Member = () => {
       }
       setSTartFrom(from)
       setEndTo(to);
+      let skipValue = skip+9
+      setSkip(skipValue);
+      fetchData(skipValue,9);
 
     }
 
+  } 
+  const handleSearchData = async()=>{
+    if(search!==""){
+      setIsSearchModeOn(true);
+      await axios.get(`http://localhost:4000/members/searched-members?searchTerms=${search}`,{withCredentials:true}).then((response)=>{
+        console.log(response)
+      }).catch(err=>{
+      toast.error("Something Technical Fault")
+      console.log(err)
+    })
+    }
   }
 
 
@@ -115,8 +139,8 @@ const Member = () => {
       <Link to={"/dashboard"}><ArrowBackIcon /> Back to Dashboard </Link>
 
       <div className='mt-5 w-1/2 flex gap-2'>
-        <input type='text' className='border-2 w-full p-2 rounded-lg' placeholder='Search By Name or Mobile no' />
-        <div className="bg-slate-900 p-3 border-2 text-white rounded-lg cursor-pointer hover:bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:text-black">
+        <input type='text' value={search} onChange={(e)=>{setSearch(e.target.value)}} className='border-2 w-full p-2 rounded-lg' placeholder='Search By Name or Mobile no' />
+        <div onClick={()=>{handleSearchData()}} className="bg-slate-900 p-3 border-2 text-white rounded-lg cursor-pointer hover:bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:text-black">
           <SearchIcon />
         </div>
       </div>
@@ -155,6 +179,7 @@ const Member = () => {
           content={<Addmembers handleClose={handleMembers} />}
         />
       )}
+      <ToastContainer/>
     </div>
   );
 };
