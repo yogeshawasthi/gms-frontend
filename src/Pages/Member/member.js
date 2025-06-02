@@ -118,7 +118,7 @@ const Member = () => {
       setIsSearchModeOn(true);
       await axios.get(`http://localhost:4000/members/searched-member?searchTerm=${search}`, { withCredentials: true }).then((response) => {
         console.log(response)
-        let members = response.data.membes;// members is not 
+        let members = response.data.membes;// console is rendereing membes not as members that was error
         if (!Array.isArray(members)) {
           members = members ? [members] : [];
         }
