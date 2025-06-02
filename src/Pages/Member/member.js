@@ -119,7 +119,6 @@ const Member = () => {
       await axios.get(`http://localhost:4000/members/searched-member?searchTerm=${search}`, { withCredentials: true }).then((response) => {
         console.log(response)
         let members = response.data.membes;
-        // Ensure members is always an array
         if (!Array.isArray(members)) {
           members = members ? [members] : [];
         }
