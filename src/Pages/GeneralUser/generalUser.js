@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Link } from 'react-router-dom';
 import MemberCard from '../../Components/MemberCard/memberCard';
+import {getMonthlyJoined} from './data'; // Assuming this is the correct import path for the data fetching function
 
 const GeneralUser = () => {
     const [header, setHeader] = useState("");
@@ -17,6 +18,8 @@ const GeneralUser = () => {
         switch (func) {
             case "monthlyJoined":
                 setHeader("Monthly Joined Members");
+                let datas = await getMonthlyJoined();
+                setData(datas.members);
                 break;
 
             case "threeDayExpire":
@@ -57,13 +60,11 @@ const GeneralUser = () => {
 
             <div className='bg-slate-100 p-5 mt-5 rounded-lg grid grid-cols-1 gap-2 md:grid-cols-3 overflow-x-auto h-[80%]'>
                 {data.length > 0 ? (
-                    data.map((member, index) => <MemberCard key={index} member={member} />)
+                    data.map((member, index) => <MemberCard key={index} item={member} />)
                 ) : (
-                    <>
-                        <MemberCard />
-                        <MemberCard />
-                        <MemberCard />
-                    </>
+                    <div className="col-span-full text-center text-gray-500">
+                        No members found.
+                    </div>
                 )}
             </div>
         </div>

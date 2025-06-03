@@ -137,6 +137,13 @@ const Member = () => {
         toast.error("Something Technical Fault")
         console.log(err)
       })
+    }else {
+      if(isSearchModeOn){
+        window.location.reload();
+      }else{
+        toast.error("Please Enter Search Term")
+      }
+
     }
   }
 
@@ -161,7 +168,7 @@ const Member = () => {
       </div>
 
       <div className='mt-5 text-xl flex justify-between text-slate-900'>
-        <div>Total Members</div>
+        <div>Total Members {isSearchModeOn?totalData:null}</div>
         {
           !isSearchModeOn ? <div className='flex gap-5'>
             <div>{startFrom + 1} -{endTo} of {totalData} Members</div>
