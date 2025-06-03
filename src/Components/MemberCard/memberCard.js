@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 
 const MemberCard = ({ item }) => {
     return (
-        <>
         <Link
             to={`/member/${item?._id}`}
             className='bg-white rounded-lg p-3 cursor-pointer group transition duration-300 hover:shadow-2xl hover:scale-105 hover:bg-gradient-to-br hover:from-indigo-500 hover:via-purple-500 hover:to-pink-500'
@@ -26,7 +25,6 @@ const MemberCard = ({ item }) => {
                 Next Bill Date : {item?.nextBillDate.slice(0, 10).split('-').reverse().join('-')}
             </div>
         </Link>
-        </>
     )
 }
 
