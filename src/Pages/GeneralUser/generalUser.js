@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Link } from 'react-router-dom';
 import MemberCard from '../../Components/MemberCard/memberCard';
-import {getMonthlyJoined} from './data'; // Assuming this is the correct import path for the data fetching function
+import {getMonthlyJoined,threeDayExpire} from './data'; // Assuming this is the correct import path for the data fetching function
 
 const GeneralUser = () => {
     const [header, setHeader] = useState("");
@@ -18,12 +18,15 @@ const GeneralUser = () => {
         switch (func) {
             case "monthlyJoined":
                 setHeader("Monthly Joined Members");
-                let datas = await getMonthlyJoined();
+                var datas = await getMonthlyJoined();
                 setData(datas.members);
                 break;
 
             case "threeDayExpire":
                 setHeader("Expring In 3 Days Members");
+                var datas = await threeDayExpire();
+                setData(datas.members);
+                
                 break;
 
             case "fourToSevenDaysExpire":
