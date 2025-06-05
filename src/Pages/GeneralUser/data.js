@@ -14,7 +14,6 @@ const getMonthlyJoined = async () => {
 const threeDayExpire = async () => {
     try {
         const response = await axios.get('http://localhost:4000/members/within-3-days-expiring', { withCredentials: true });
-        console.log(response.data); // Debugging
         return response.data;
     } catch (error) {
         console.error("Error fetching members expiring in 3 days:", error);
@@ -22,5 +21,34 @@ const threeDayExpire = async () => {
     }   
 } 
 
-export {threeDayExpire};
-export {getMonthlyJoined};
+const fourToSevenDaysExpire = async () => {
+    try {
+        const response = await axios.get('http://localhost:4000/members/within-4-7-expiring', { withCredentials: true });
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching members expiring in 3 days:", error);
+        return [];
+    }   
+} 
+
+const expired = async () => {
+    try {
+        const response = await axios.get('http://localhost:4000/members/expired-member', { withCredentials: true });
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching members expiring in 3 days:", error);
+        return [];
+    }   
+} 
+
+const inActiveMember = async () => {
+    try {
+        const response = await axios.get('http://localhost:4000/members/inactive-member', { withCredentials: true });
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching members expiring in 3 days:", error);
+        return [];
+    }   
+} 
+
+export {getMonthlyJoined,threeDayExpire,fourToSevenDaysExpire,expired,inActiveMember};

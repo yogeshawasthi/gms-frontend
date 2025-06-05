@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Link } from 'react-router-dom';
 import MemberCard from '../../Components/MemberCard/memberCard';
-import {getMonthlyJoined,threeDayExpire} from './data'; // Assuming this is the correct import path for the data fetching function
+import {getMonthlyJoined,threeDayExpire,fourToSevenDaysExpire,expired,inActiveMember} from './data'; // Assuming this is the correct import path for the data fetching function
 
 const GeneralUser = () => {
     const [header, setHeader] = useState("");
@@ -31,14 +31,20 @@ const GeneralUser = () => {
 
             case "fourToSevenDaysExpire":
                 setHeader("Expring In 4-7 Days Members");
+                var datas = await fourToSevenDaysExpire();
+                setData(datas.members);
                 break;
 
             case "expired":
                 setHeader("Expired Members");
+                var datas = await expired();
+                setData(datas.members);
                 break;
 
             case "inActiveMember":
                 setHeader("InActive Members");
+                var datas = await inActiveMember();
+                setData(datas.members);
 
             default:
                 console.warn('No matching case for function:', func); // Debugging
