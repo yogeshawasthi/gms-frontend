@@ -1,13 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Switch from "react-switch";
 import { ToastContainer, toast } from "react-toastify";
+import axios from "axios";
 
 const MemberDetail = () => {
   const [status, setStatus] = useState("Pending");
   const [renew, setRenew] = useState(false);
+  const [member, setMember] = useState(null);
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  useEffect(() => {
+    fetchData();
+    // No need to call useParams here again
+  }, []);
+
+  const fetchData = async () => {
+    await axios
+      .get(`http://localhost:4000/members/get-member/${id}`, { withCredentials: true })
+      .then((response) => {
+        setMember(response.data.member || response.data); // Adjust according to your backend response
+        setStatus(response.data.member?.status || "Pending");
+        toast.success("Member data fetched successfully!");
+      })
+      .catch((error) => {
+        console.error("Error fetching member data:", error);
+        toast.error("Failed to fetch member data.");
+      });
+  };
 
   const handleSwitchBtn = () => {
     let newStatus = status === "Active" ? "Pending" : "Active";
@@ -30,6 +52,7 @@ const MemberDetail = () => {
           <div className="w-1/3 mx-auto">
             <img
               src={
+                member?.profilePic ||
                 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtrnHUFH3hZsJtvAagjwbZrxdx-1z8sLklTg&s"
               }
               className="w-full mx-auto"
@@ -38,20 +61,20 @@ const MemberDetail = () => {
           </div>
           <div className="w-2/3 mt-5 text-xl p-5">
             <div className="mt-1 mb-2 text-2xl font-semibold">
-              Name: Baba Tillu
+              Name: {member?.name || "N/A"}
             </div>
             <div className="mt-1 mb-2 text-2xl font-semibold">
-              Mobile: +9779876735747
+              Mobile: {member?.mobileNo || "N/A"}
             </div>
             <div className="mt-1 mb-2 text-2xl font-semibold">
-              Address: FurFuri Nagari
+              Address: {member?.address || "N/A"}
             </div>
 
             <div className="mt-1 mb-2 text-2xl font-semibold">
-              Joined Date: 10-11-2025
+              Joined Date: {member?.joiningDate ? member.joiningDate.slice(0, 10).split('-').reverse().join('-') : "N/A"}
             </div>
             <div className="mt-1 mb-2 text-2xl font-semibold">
-              Next Bill Date: 10-11-2025
+              Next Bill Date: {member?.nextBillDate ? member.nextBillDate.slice(0, 10).split('-').reverse().join('-') : "N/A"}
             </div>
 
             <div className="mt-1 mb-2 flex gap-4 text-2xl font-semibold">
@@ -97,9 +120,7 @@ const MemberDetail = () => {
               ) : null
             }
           </div>
-
         </div>
-
       </div>
       <ToastContainer />
     </div>

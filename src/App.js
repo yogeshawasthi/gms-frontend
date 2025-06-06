@@ -19,7 +19,7 @@ function App() {
     let isLogedIn = localStorage.getItem("isLogin");
     if (isLogedIn) {
       setIsLogin(true);
-      // navigate("/dashboard");
+      navigate("/dashboard");
     }else{
       setIsLogin(false)
       navigate('/');
