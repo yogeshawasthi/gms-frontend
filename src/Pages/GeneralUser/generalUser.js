@@ -69,7 +69,7 @@ const GeneralUser = () => {
 
             <div className='bg-slate-100 p-5 mt-5 rounded-lg grid grid-cols-1 gap-2 md:grid-cols-3 overflow-x-auto h-[80%]'>
                 {data.length > 0 ? (
-                    data.map((member, index) => <MemberCard key={index} item={member} />)
+                    data.map((member, index) => <MemberCard key={index} item={member} header={header} />)
                 ) : (
                     <div className="col-span-full text-center text-gray-500">
                         No members found.

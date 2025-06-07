@@ -9,6 +9,7 @@ const MemberDetail = () => {
   const [status, setStatus] = useState("Pending");
   const [renew, setRenew] = useState(false);
   const [member, setMember] = useState(null);
+  const [data,setData] = useState(null);
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -21,9 +22,10 @@ const MemberDetail = () => {
     await axios
       .get(`http://localhost:4000/members/get-member/${id}`, { withCredentials: true })
       .then((response) => {
+        setData(response.data.member)
         setMember(response.data.member || response.data); // Adjust according to your backend response
         setStatus(response.data.member?.status || "Pending");
-        toast.success("Member data fetched successfully!");
+        toast.success(response.data.member.message);
       })
       .catch((error) => {
         console.error("Error fetching member data:", error);
