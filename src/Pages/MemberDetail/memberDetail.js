@@ -51,12 +51,21 @@ const MemberDetail = () => {
       });
   };
 
-  const handleSwitchBtn = () => {
-    let newStatus = status === "Active" ? "Pending" : "Active";
-    setStatus(newStatus);
-    console.log(`Status changed to: ${newStatus}`);
+  const handleSwitchBtn = async () => {
+    let statuss = status === "Active" ? "Pending" : "Active";
+    try {
+      await axios.post(
+        `http://localhost:4000/members/change-status/${id}`,
+        { status: statuss }, // send as object!
+        { withCredentials: true }
+      );
+      toast.success("Status changed successfully!");
+      setStatus(statuss);
+    } catch (error) {
+      console.error("Error changing status:", error);
+      toast.error("Failed to change status.");
+    }
   };
-
 
   const isDateInPast = (inputData) => {
     const today = new Date();
@@ -68,6 +77,20 @@ const MemberDetail = () => {
     let value = event.target.value;
     setPlanMember(value);
   }
+
+  const handleRenewSaveBtn = async () => {
+    await axios.put(`http://localhost:4000/members/update-member-plan/${id}`, { membership: planMember }, { withCredentials: true })
+      .then((response) => {
+        setData(response.data.message);
+        toast.success("Member plan updated successfully!");
+      }).catch((error) => {
+        console.error("Error updating member plan:", error);  
+        toast.error("Failed to update member plan.");
+      });
+  };
+
+
+
 
 
   return (
@@ -115,7 +138,7 @@ const MemberDetail = () => {
               <Switch
                 onColor="#6366F1"
                 checked={status === "Active"}
-                onChange={handleSwitchBtn}
+                onChange={()=>{handleSwitchBtn()}}
               />
             </div>
 
@@ -145,7 +168,7 @@ const MemberDetail = () => {
                           <option value={item._id} key={index}>{item.months} Months Membership</option>
                         ))}
                       </select>
-                      <div className={'mt-3 rounded-lg p-3 border-2 border-slate-900 text-center w-1/2 mx-auto cursor-pointer hover:text-white hover:bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500'}> Save</div>
+                      <div className={'mt-3 rounded-lg p-3 border-2 border-slate-900 text-center w-1/2 mx-auto cursor-pointer hover:text-white hover:bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500'}onClick={()=>{handleRenewSaveBtn()}}> Save</div>
                     </div>
                   </div>
                 </div>
