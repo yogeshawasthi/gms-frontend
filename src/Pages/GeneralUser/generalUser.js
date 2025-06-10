@@ -45,6 +45,7 @@ const GeneralUser = () => {
                 setHeader("InActive Members");
                 var datas = await inActiveMember();
                 setData(datas.members);
+                break; // <-- Add this break!
 
             default:
                 console.warn('No matching case for function:', func); // Debugging

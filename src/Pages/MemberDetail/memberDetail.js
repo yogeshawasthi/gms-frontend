@@ -24,7 +24,7 @@ const MemberDetail = () => {
       axios.get(`http://localhost:4000/plans/getMembership`, { withCredentials: true })
         .then((response) => {
           setMembership(response.data.membership);
-          setPlanMember(response.data.membership[0].months);
+          setPlanMember(response.data.membership[0]._id);
           console.log("Membership data fetched successfully:", response.data.membership);
         }).catch((error) => {
           console.error("Error fetching membership data:", error);
@@ -35,14 +35,29 @@ const MemberDetail = () => {
       
 
   const fetchData = async () => {
-    console.log("fetchData called with id:", id); // Add this
+    console.log("fetchData called with id:", id);
     await axios
       .get(`http://localhost:4000/members/get-member/${id}`, { withCredentials: true })
-      .then((response) => {
-        console.log("API response:", response); // Add this
-        setData(response.data.member)
+      .then(async (response) => {
+        setData(response.data.member);
         setMember(response.data.member || response.data);
-        setStatus(response.data.member?.status || "Pending");
+
+        // Check if nextBillDate is in the past and set status accordingly
+        const nextBillDate = response.data.member?.nextBillDate;
+        if (nextBillDate && isDateInPast(nextBillDate)) {
+          setStatus("Inactive");
+          // Update status in backend if not already inactive
+          if (response.data.member?.status !== "Inactive") {
+            await axios.post(
+              `http://localhost:4000/members/change-status/${id}`,
+              { status: "Inactive" },
+              { withCredentials: true }
+            );
+          }
+        } else {
+          setStatus(response.data.member?.status || "Pending");
+        }
+
         toast.success(response.data.member.message || "Member data fetched successfully!");
       })
       .catch((error) => {
@@ -52,11 +67,11 @@ const MemberDetail = () => {
   };
 
   const handleSwitchBtn = async () => {
-    let statuss = status === "Active" ? "Pending" : "Active";
+    let statuss = status === "Active" ? "Inactive" : "Active";
     try {
       await axios.post(
         `http://localhost:4000/members/change-status/${id}`,
-        { status: statuss }, // send as object!
+        { status: statuss },
         { withCredentials: true }
       );
       toast.success("Status changed successfully!");
@@ -79,12 +94,28 @@ const MemberDetail = () => {
   }
 
   const handleRenewSaveBtn = async () => {
-    await axios.put(`http://localhost:4000/members/update-member-plan/${id}`, { membership: planMember }, { withCredentials: true })
-      .then((response) => {
+    await axios.put(
+      `http://localhost:4000/members/update-member-plan/${id}`,
+      { membership: planMember },
+      { withCredentials: true }
+    )
+      .then(async (response) => {
         setData(response.data.message);
         toast.success("Member plan updated successfully!");
-      }).catch((error) => {
-        console.error("Error updating member plan:", error);  
+        setRenew(false); // Close the renew and save section
+
+        // Set status to Active after successful renew
+        await axios.post(
+          `http://localhost:4000/members/change-status/${id}`,
+          { status: "Active" },
+          { withCredentials: true }
+        );
+        setStatus("Active");
+
+        fetchData(); // Optionally refresh member data
+      })
+      .catch((error) => {
+        console.error("Error updating member plan:", error);
         toast.error("Failed to update member plan.");
       });
   };
@@ -138,32 +169,43 @@ const MemberDetail = () => {
               <Switch
                 onColor="#6366F1"
                 checked={status === "Active"}
-                onChange={()=>{handleSwitchBtn()}}
+                onChange={() => {
+                  if (!isDateInPast(member?.nextBillDate)) {
+                    handleSwitchBtn();
+                  } else {
+                    toast.error("Cannot activate expired member. Please renew first!");
+                  }
+                }}
+                disabled={isDateInPast(member?.nextBillDate)}
               />
             </div>
 
-            {isDateInPast(data?.nextBillDate) && <div
-              onClick={() => {
-                if (status === "Active") {
-                  setRenew((prev) => !prev);
-                } else {
-                  toast.error("Cannot renew while status is not Active!");
-                }
-              }}
-              className={`mt-1 rounded-lg p-3 border-2 border-slate-900 text-center ${status === "Active"
-                ? "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white"
-                : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                } w-full md:w-1/2 cursor-pointer hover:text-white hover:bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500`}
-            >
-              Renew
-            </div>}
+            {isDateInPast(data?.nextBillDate) && (
+              <div
+                onClick={() => {
+                  if (status === "Inactive" || status === "Pending") {
+                    setRenew((prev) => !prev);
+                  } else {
+                    toast.error("Cannot renew while status is not Inactive or Pending!");
+                  }
+                }}
+                className={`mt-1 rounded-lg p-3 border-2 border-slate-900 text-center ${
+                  (status === "Inactive" || status === "Pending")
+                    ? "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white cursor-pointer hover:text-white hover:bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"
+                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                } w-full md:w-1/2`}
+                style={{ pointerEvents: (status === "Inactive" || status === "Pending") ? "auto" : "none" }}
+              >
+                Renew
+              </div>
+            )}
             {
-              renew && status === "Active" ? (
+              renew && status === "Inactive" || status === "Pending" ? (
                 <div className='rounded-lg p-3 mt-5  mb-5 h-fit bg-slate-50 md:w-[100%]'>
                   <div className=" w-full ">
                     <div className="my-5" >
                       <div >Membership</div>
-                      <select value={planMember}  onChange={ handleOnChangeSelect } className="border-2 w-full p-2 rounded-lg">
+                      <select value={planMember} onChange={handleOnChangeSelect} className="border-2 w-full p-2 rounded-lg">
                         {membership.map((item, index) => (
                           <option value={item._id} key={index}>{item.months} Months Membership</option>
                         ))}
