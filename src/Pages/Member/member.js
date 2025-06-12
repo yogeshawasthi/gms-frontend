@@ -22,6 +22,7 @@ const Member = () => {
   const [skip, setSkip] = useState(0);
   const [search, setSearch] = useState("")
   const [isSearchModeOn, setIsSearchModeOn] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -41,6 +42,7 @@ const Member = () => {
   }, [])
 
   const fetchData = async (skip, limits) => {
+    setLoading(true); // Start loading
     // Fetching members data from the server
     await axios.get(`http://localhost:4000/members/all-member?skip=${skip}&limit=${limits}`, {
       withCredentials: true,
@@ -64,7 +66,9 @@ const Member = () => {
         setSTartFrom(0);
         setEndTo(totalData);
       }
+      setLoading(false); // Stop loading
     }).catch(err => {
+      setLoading(false); // Stop loading on error
       toast.error("Something Technical Fault")
       console.log(err)
     })
@@ -179,12 +183,19 @@ const Member = () => {
       </div>
 
       <div className='bg-slate-100 p-5 mt-5 rounded-lg grid gap-2 grid-cols-3 overflow-x-auto h-[65%]'>
-        {data.length === 0 ? (
+        {loading ? (
+          Array.from({ length: 9 }).map((_, idx) => (
+            <div
+              key={idx}
+              className="bg-white rounded-lg p-3 h-80 skeleton-loader"
+              style={{ border: "1px solid #e5e7eb" }}
+            ></div>
+          ))
+        ) : data.length === 0 ? (
           <div>No members found.</div>
         ) : (
           data.map((item, index) => (
-            <div key={item._id || index}>
-              
+            <div key={item._id || index} className="member-fade-in">
               <MemberCard item={item} />
             </div>
           ))
