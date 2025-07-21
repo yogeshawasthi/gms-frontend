@@ -7,7 +7,7 @@ import Stack from '@mui/material/Stack';
 import LinearProgress from '@mui/material/LinearProgress';
 import { toast, ToastContainer } from 'react-toastify';
 
-const SignUp = () => {
+const SignUp = ({ onToggle }) => {
     const [showPassword, setShowPassword] = useState(false);
     const [forgotPassword, setForgotPassword] = useState(false);
     const [inputField, setInputField] = useState({
@@ -179,6 +179,16 @@ const SignUp = () => {
                     content={<ForgotPassword />}
                 />
             )}
+            <p className="text-white text-center mt-6">
+                Already have an account?{" "}
+                <span
+                    className="text-yellow-400 underline cursor-pointer"
+                    onClick={onToggle}
+                >
+                    Login here
+                </span>
+            </p>
+
             <ToastContainer />
         </div>
     );
