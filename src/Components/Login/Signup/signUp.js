@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import './signUp.css';
 import Modal from '../../Modal/modal';
 import ForgotPassword from '../../Forgotpassword/forgotPassword';
-import axios from 'axios'
+import axios from 'axios';
 import Stack from '@mui/material/Stack';
 import LinearProgress from '@mui/material/LinearProgress';
-import { toast, ToastContainer } from 'react-toastify';// toast container is being used to show the success and error messages
-
+import { toast, ToastContainer } from 'react-toastify';
 
 const SignUp = () => {
+    const [showPassword, setShowPassword] = useState(false);
     const [forgotPassword, setForgotPassword] = useState(false);
     const [inputField, setInputField] = useState({
         gymName: "",
@@ -21,7 +21,8 @@ const SignUp = () => {
     const [loaderImage, setLoaderImage] = useState(false);
 
     const handleOnChange = (event, name) => {
-        setInputField({ ...inputField, [name]: event.target.value });
+        const value = name === "email" ? event.target.value.toLowerCase() : event.target.value;
+        setInputField({ ...inputField, [name]: value });
     };
 
     const handleClose = () => {
@@ -29,54 +30,84 @@ const SignUp = () => {
     };
 
     const uploadImage = async (event) => {
-        setLoaderImage(true)
-        console.log("Image Uploading")
+        setLoaderImage(true);
         const files = event.target.files;
         const data = new FormData();
         data.append('file', files[0]);
-
-        // dnbtfydel
-
         data.append('upload_preset', 'gym-management');
 
         try {
             const response = await axios.post("https://api.cloudinary.com/v1_1/dnbtfydel/image/upload", data);
-            console.log(response)
             const imageUrl = response.data.url;
-            setLoaderImage(false)
-
-            setInputField({ ...inputField, profilePic: imageUrl })
+            setLoaderImage(false);
+            setInputField({ ...inputField, profilePic: imageUrl });
         } catch (err) {
-            console.log(err)
-            setLoaderImage(false)
+            console.log(err);
+            setLoaderImage(false);
+        }
+    };
+
+    const validateForm = () => {
+        if (!inputField.email) {
+            toast.error("Email is required");
+            return false;
+        } else if (!/^[a-z0-9._%+-]+@gmail\.com$/.test(inputField.email)) {
+            toast.error(" Please Provide Correct Gmail Address");
+            return false;
         }
 
-    }
+        if (!inputField.gymName) {
+            toast.error("Gym name is required");
+            return false;
+        }
+
+        if (!inputField.userName) {
+            toast.error("Username is required");
+            return false;
+        }
+
+        if (!inputField.password) {
+            toast.error("Password is required");
+            return false;
+        } else if (inputField.password.length < 6) {
+            toast.error("Password must be at least 6 characters long");
+            return false;
+        }
+
+        return true;
+    };
 
     const handleRegister = async () => {
+        if (!validateForm()) return;
+
         await axios.post("http://localhost:4000/auth/register", inputField)
             .then((resp) => {
                 const successMsg = resp.data.message;
                 toast.success(successMsg);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 5500); // 1.5 seconds delay for toast to show
             })
             .catch(err => {
                 const errorMessage = err.response?.data?.error || "Registration failed";
                 toast.error(errorMessage);
             });
-    }
-
-
+    };
 
     return (
-        <div className='customSignup w-1/3 p-10 mt-20 ml-20 bg-gray-50 bg-opacity-50 h-[450px] overflow-y-auto'>
-            <div className='font-sans text-white text-center text-3xl'>Register Your Gym</div>
+        <div className='customSignup w-1/3 p-10 mt-20 ml-20 bg-gray-50 bg-opacity-15 h-[450px] overflow-y-auto rounded-3xl '>
+            <div className='font-sans text-white text-center text-3xl font-bold'>Register Your Gym</div>
+
+            <label className='text-white block font-bold pt-4'>E-mail</label>
             <input
                 type='text'
                 value={inputField.email}
                 onChange={(event) => handleOnChange(event, "email")}
-                className='w-full my-10 p-2 rounded-lg'
+                className='w-full my-2 p-2 rounded-lg'
                 placeholder='Enter Email'
             />
+
+            <label className='text-white font-bold block mb-2 pt-5'>Gym Name</label>
             <input
                 type='text'
                 value={inputField.gymName}
@@ -84,37 +115,63 @@ const SignUp = () => {
                 className='w-full mb-10 p-2 rounded-lg'
                 placeholder='Enter Gym Name '
             />
+
+            <label className='text-white font-bold block mb-2'>Username</label>
             <input
                 type='text'
                 value={inputField.userName}
                 onChange={(event) => handleOnChange(event, "userName")}
                 className='w-full mb-10 p-2 rounded-lg'
-                placeholder='Enter userName'
+                placeholder='Enter Username'
             />
-            <input
-                type='password'
-                value={inputField.password}
-                onChange={(event) => handleOnChange(event, "password")}
-                className='w-full mb-10 p-2 rounded-lg'
-                placeholder='Enter Password'
-            />
+
+            <label className='text-white font-bold block mb-2'>Password</label>
+            <div className="relative">
+                <input
+                    type={showPassword ? 'text' : 'password'}
+                    value={inputField.password}
+                    onChange={(event) => handleOnChange(event, "password")}
+                    className='w-full mb-10 p-2 rounded-lg pr-10'
+                    placeholder='Enter Password'
+                />
+                <span
+                    className="absolute right-3 top-3 text-black cursor-pointer"
+                    onClick={() => setShowPassword(!showPassword)}
+                >
+                    {showPassword ? '🙈' : '👁️'}
+                </span>
+            </div>
+
+
+            <label className='text-white font-bold block mb-2'>Profile Picture</label>
             <input type='file' onChange={(e) => { uploadImage(e) }} className='w-full mb-6 p-2 rounded-lg' />
+
             {
-                loaderImage && <Stack sx={{ width: '100%', color: 'grey.500' }} spacing={2}>
-                    <LinearProgress color="secondary" />
-                </Stack>
+                loaderImage && (
+                    <Stack sx={{ width: '100%', color: 'grey.500' }} spacing={2}>
+                        <LinearProgress color="secondary" />
+                    </Stack>
+                )
             }
 
-            <img src={inputField.profilePic} alt="Profile" />
-            <div className='p-2 w-[80%] border-2 bg-slate-800 mx-auto rounded-lg text-white text-center text-lg hover:bg-white hover:text-black font-semibold cursor-pointer' onClick={()=>handleRegister()}>
+            <img src={inputField.profilePic} alt="Profile"
+                className="mx-auto my-4 w-40 h-40 rounded-full object-cover shadow-md border-2 border-white"
+            />
+
+            <div
+                className='p-2 w-[80%] border-2 bg-slate-800 mx-auto rounded-lg text-white text-center text-lg hover:bg-white hover:text-black font-semibold cursor-pointer'
+                onClick={handleRegister}
+            >
                 Register
             </div>
+
             <div
                 className='p-2 w-[80%] mt-5 border-2 bg-slate-800 mx-auto rounded-lg text-white text-center text-lg hover:bg-white hover:text-black font-semibold cursor-pointer'
-                onClick={() => handleClose()}
+                onClick={handleClose}
             >
                 Forgot Password
             </div>
+
             {forgotPassword && (
                 <Modal
                     header="Forgot Password"
@@ -122,7 +179,7 @@ const SignUp = () => {
                     content={<ForgotPassword />}
                 />
             )}
-            <ToastContainer/>
+            <ToastContainer />
         </div>
     );
 };
