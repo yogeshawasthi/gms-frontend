@@ -135,8 +135,9 @@ const SignUp = ({ onToggle }) => {
                     placeholder='Enter Password'
                 />
                 <span
-                    className="absolute right-3 top-3 text-black cursor-pointer"
+                    className="absolute right-2 top-2   text-black cursor-pointer text-2xl"
                     onClick={() => setShowPassword(!showPassword)}
+                    style={{ lineHeight: '1' }}
                 >
                     {showPassword ? '🙈' : '👁️'}
                 </span>

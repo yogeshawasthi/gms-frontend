@@ -51,8 +51,9 @@ const Login = ({ onToggle }) => {
           placeholder='Enter password'
         />
         <span
-          className="absolute right-3 top-3 text-black cursor-pointer"
+          className="absolute right-2 top-2 pt-2 text-black cursor-pointer text-2xl"
           onClick={() => setShowPassword(!showPassword)}
+          style={{ lineHeight: '1' }}
         >
           {showPassword ? '🙈' : '👁️'}
         </span>
@@ -66,12 +67,12 @@ const Login = ({ onToggle }) => {
       </div>
 
       <p className="text-white text-center mt-6">
-        Don’t have an account?{" "}
+        Don’t have an account Or Forget Password?{" "}
         <span
           className="text-yellow-400 underline cursor-pointer"
           onClick={onToggle}
         >
-          Create one
+          Click here
         </span>
       </p>
     </div>
