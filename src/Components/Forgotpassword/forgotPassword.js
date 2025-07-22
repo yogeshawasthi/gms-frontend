@@ -75,7 +75,7 @@ const ForgotPassword = () => {
     console.log(inputField);
 
     return (
-        <div className='w-full'>
+        <div className='w-full '>
             <div className='w-full mb-5 pl-5'>
                 <div>Enter Your Email</div>
                 <input
