@@ -219,6 +219,26 @@ const MemberDetail = () => {
           </div>
         </div>
       </div>
+      <div className="mt-5">
+        <button
+          className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-800 transition font-semibold"
+          onClick={async () => {
+            if (window.confirm("Are you sure you want to delete this member?")) {
+              try {
+                await axios.delete(`http://localhost:4000/members/${id}`, { withCredentials: true });
+                toast.success("Member deleted successfully!");
+                setTimeout(() => {
+                  navigate(-1); // Go back after deletion
+                }, 1200);
+              } catch (err) {
+                toast.error("Failed to delete member");
+              }
+            }
+          }}
+        >
+          Delete Member
+        </button>
+      </div>
       <ToastContainer />
     </div>
   );

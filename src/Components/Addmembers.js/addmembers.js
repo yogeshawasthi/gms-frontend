@@ -77,7 +77,7 @@ const Addmembers = ({ }) => {
       });
     } catch (err) {
       console.error(err);
-      toast.error('Something went wrong during registration');
+      toast.error(` Use Diffrent Mobile number`);
     }
   };
   
@@ -122,7 +122,7 @@ const Addmembers = ({ }) => {
           value={inputField.mobileNo}
           onChange={(event) => {
             // Accept only numbers and max 10 digits
-            const value = event.target.value.replace(/\D/g, '').slice(0, 10);// Ensure only numbers and limit to 10 digits
+            const value = event.target.value.replace(/\D/g, '').slice(0, 10);
             setInputField({ ...inputField, mobileNo: value });
           }}
           placeholder="Mobile No"
@@ -130,6 +130,7 @@ const Addmembers = ({ }) => {
           maxLength={10}
           className="border-2 w-[90%] pl-3 pr-3 pt-2 pb-2 border-slate-400 rounded-md h-12"
         />
+        
         <input
           value={inputField.address}
           onChange={(event) => handleOnChange(event, 'address')}
@@ -170,8 +171,15 @@ const Addmembers = ({ }) => {
         </div>
 
       </div>
+      {/* Validation function for mobile number length */}
       <button
-        onClick={handleRegisterButton}
+        onClick={() => {
+          if (inputField.mobileNo.length !== 10) {
+            toast.error("Mobile number should be 10 digits");
+            return;
+          }
+          handleRegisterButton();
+        }}
         className="mt-5 bg-blue-500 text-white px-4 py-2 rounded-md"
       >
         Register

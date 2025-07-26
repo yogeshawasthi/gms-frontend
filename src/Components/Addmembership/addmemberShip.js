@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { toast, ToastContainer } from 'react-toastify';
+import CloseIcon from '@mui/icons-material/Close';
+
 const AddmemberShip = ({ handleClose }) => {
 
     const [inputField, setInputField] = useState({ months: "", price: "" });
@@ -36,7 +38,7 @@ const AddmemberShip = ({ handleClose }) => {
         try {
             const response = await axios.post('http://localhost:4000/plans/add-membership', inputField, { withCredentials: true });
             toast.success(response.data.message)
-            handleClose();
+            // handleClose();
             fetchMembership(); // Refresh the list
         } catch (err) {
             console.log(err);
@@ -50,10 +52,29 @@ const AddmemberShip = ({ handleClose }) => {
                 {
                     membership.map((item, index) => {
                         return (
-                            <div className='text-lg bg-slate-900 text-white border-2 pl-2 pr-2 flex-col gap-3 justify-between  cursor-pointer pt-1 pb-1 rounded-xl font-semibold hover:bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500'>
-                                <div> {item.months} months Membership</div>
-                                <div>RS {item.price}</div>
-
+                            <div key={item._id} className='relative flex items-start'>
+                                {/* Cross icon absolutely positioned outside the card */}
+                                <span
+                                    className="absolute -top-3 -right-3 z-20 cursor-pointer text-red-500 hover:text-red-700 bg-white rounded-full shadow"
+                                    onClick={async (e) => {
+                                        e.stopPropagation();
+                                        if (window.confirm("Are you sure you want to delete this membership?")) {
+                                            try {
+                                                await axios.delete(`http://localhost:4000/plans/delete-membership/${item._id}`, { withCredentials: true });
+                                                toast.success("Membership deleted!");
+                                                fetchMembership();
+                                            } catch (err) {
+                                                toast.error("Failed to delete membership");
+                                            }
+                                        }
+                                    }}
+                                >
+                                    <CloseIcon fontSize="small" />
+                                </span>
+                                <div className='text-lg bg-slate-900 text-white border-2 pl-2 pr-2 flex-col gap-3 justify-between cursor-pointer pt-1 pb-1 rounded-xl font-semibold hover:bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 min-w-[180px]'>
+                                    <div>{item.months} months Membership</div>
+                                    <div>RS {item.price}</div>
+                                </div>
                             </div>
                         )
                     })
