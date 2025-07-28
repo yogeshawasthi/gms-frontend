@@ -28,7 +28,7 @@ const Login = ({ onToggle }) => {
   };
 
   return (
-    <div className='w-1/3 p-10 mt-20 ml-20 bg-gray-50 bg-opacity-15 h-fit rounded-3xl'>
+    <div className='w-1/3 p-10 mt-20 ml-20 bg-gray-50 bg-opacity-35 h-fit rounded-3xl'>
       <ToastContainer />
       <div className='font-sans font-bold text-white text-center text-3xl'>Login</div>
 

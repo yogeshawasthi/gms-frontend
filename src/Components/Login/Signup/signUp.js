@@ -95,7 +95,7 @@ const SignUp = ({ onToggle }) => {
     };
 
     return (
-        <div className='customSignup w-1/3 p-10 mt-20 ml-20 bg-gray-50 bg-opacity-15 h-[450px] overflow-y-auto rounded-3xl '>
+        <div className='customSignup w-1/3 p-10 mt-20 ml-20 bg-gray-50 bg-opacity-35 h-[450px] overflow-y-auto rounded-3xl '>
             <div className='font-sans text-white text-center text-3xl font-bold'>Register Your Gym</div>
 
             <label className='text-white block font-bold pt-4'>E-mail</label>

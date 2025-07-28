@@ -1,5 +1,6 @@
 import React from 'react';
 import img from '../../images/home_img.jpg'; // Import your gym photo here
+import img2 from '../../images/gym.png'
 
 const Login = () => {
   return (
@@ -7,7 +8,7 @@ const Login = () => {
       {/* Left side with gym photo */}
       <div className="flex-1 bg-gray-100">
         <img
-          src={img} // Replace with your gym photo URL
+          src={img2} // Replace with your gym photo URL
           alt="Gym"
           className="w-full h-full object-cover"
         />

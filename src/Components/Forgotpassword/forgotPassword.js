@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // <-- import this
 import Loader from '../Loader/loader';
 import axios  from 'axios'; 
 import { toast,ToastContainer } from 'react-toastify'; // toast container is being used to show the success and error messages
@@ -10,6 +11,7 @@ const ForgotPassword = () => {
     const [contentVal, setContentvalue] = useState("Submit Your Email");
     const [inputField, setInputField] = useState({ email: "", otp: "", newPassword: "" });
     const [loader,setLoader] = useState(false);
+    const navigate = useNavigate(); // <-- add this
 
     const handleSubmit = () => {
         if (!emailSubmit) {
@@ -26,14 +28,19 @@ const ForgotPassword = () => {
 
     const changePassword = async () => {
         setLoader(true);   
-        await axios.post("http://localhost:4000/auth/reset-password", { email: inputField.email, newPassword: inputField.newPassword }).then((response) => {
-            toast.success(response.data.message);
-            setLoader(false);
-        }).catch((err) => {
-            toast.error("some Techinal Error Occured");
-            console.log(err);
-            setLoader(false);
+        await axios.post("http://localhost:4000/auth/reset-password", { email: inputField.email, newPassword: inputField.newPassword })
+    .then((response) => {
+        toast.success(response.data.message, {
+            onClose: () => navigate('/'),
+            autoClose: 2000
         });
+        setLoader(false);
+    })
+    .catch((err) => {
+        toast.error("some Techinal Error Occured");
+        console.log(err);
+        setLoader(false);
+    });
     }
 
 
@@ -76,7 +83,7 @@ const ForgotPassword = () => {
 
     return (
         <div className='w-full '>
-            <div className='w-full mb-5 pl-5'>
+            <div className='w-full mb-5 pl-5  bg-gray-50 bg-opacity-35'>
                 <div>Enter Your Email</div>
                 <input
                     type='text'
