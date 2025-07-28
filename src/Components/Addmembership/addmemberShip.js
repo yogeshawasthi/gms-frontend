@@ -35,6 +35,18 @@ const AddmemberShip = ({ handleClose }) => {
     }, [])
 
     const handleAddmembership = async () => {
+        if (!inputField.months && !inputField.price) {
+            toast.error("Please enter both Months and Price");
+            return;
+        }
+        if (!inputField.months) {
+            toast.error("Months field is required");
+            return;
+        }
+        if (!inputField.price) {
+            toast.error("Price field is required");
+            return;
+        }
         try {
             const response = await axios.post('http://localhost:4000/plans/add-membership', inputField, { withCredentials: true });
             toast.success(response.data.message)
@@ -48,50 +60,68 @@ const AddmemberShip = ({ handleClose }) => {
 
     return (
         <div className='text-black'>
-            <div className='flex flex-wrap gap-5 items-center justify-center'>
+            <div className='flex flex-wrap gap-6 items-start justify-center mb-8'>
                 {
-                    membership.map((item, index) => {
-                        return (
-                            <div key={item._id} className='relative flex items-start'>
-                                {/* Cross icon absolutely positioned outside the card */}
-                                <span
-                                    className="absolute -top-3 -right-3 z-20 cursor-pointer text-red-500 hover:text-red-700 bg-white rounded-full shadow"
-                                    onClick={async (e) => {
-                                        e.stopPropagation();
-                                        if (window.confirm("Are you sure you want to delete this membership?")) {
-                                            try {
-                                                await axios.delete(`http://localhost:4000/plans/delete-membership/${item._id}`, { withCredentials: true });
-                                                toast.success("Membership deleted!");
-                                                fetchMembership();
-                                            } catch (err) {
-                                                toast.error("Failed to delete membership");
-                                            }
+                    membership.map((item, index) => (
+                        <div key={item._id} className='relative'>
+                            <span
+                                className="absolute -top-3 -right-3 z-20 cursor-pointer text-red-500 hover:text-red-700 bg-white rounded-full shadow"
+                                onClick={async (e) => {
+                                    e.stopPropagation();
+                                    if (window.confirm("Are you sure you want to delete this plan?")) {
+                                        try {
+                                            await axios.delete(`http://localhost:4000/plans/delete-membership/${item._id}`, { withCredentials: true });
+                                            toast.success("Plan deleted!");
+                                            fetchMembership();
+                                        } catch (err) {
+                                            toast.error("Failed to delete plan");
                                         }
-                                    }}
-                                >
-                                    <CloseIcon fontSize="small" />
-                                </span>
-                                <div className='text-lg bg-slate-900 text-white border-2 pl-2 pr-2 flex-col gap-3 justify-between cursor-pointer pt-1 pb-1 rounded-xl font-semibold hover:bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 min-w-[180px]'>
-                                    <div>{item.months} months Membership</div>
-                                    <div>RS {item.price}</div>
-                                </div>
+                                    }
+                                }}
+                            >
+                                <CloseIcon fontSize="small" />
+                            </span>
+                            <div className='text-base bg-slate-900 text-white border-2 px-4 py-2 flex flex-col gap-1 justify-between cursor-pointer rounded-xl font-semibold hover:bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 min-w-[120px] max-w-[150px] items-center'>
+                                <div>{item.months} Month Plan</div>
+                                <div>Rs. {item.price}</div>
                             </div>
-                        )
-                    })
+                        </div>
+                    ))
                 }
-
-
-
             </div>
-
             <hr className='mt-10 mb-10' />
-            <div className='flex gap-10 mb-10'>
-
-                <input value={inputField.months} onChange={(event) => handleOnChange(event, "months")} className='border-2 rounded-lg text-lg w-1/3 h-1/2 p-2' type='number' placeholder="Add No. of Months" />
-
-                <input value={inputField.price} onChange={(event) => handleOnChange(event, "price")} className='border-2 rounded-lg text-lg w-1/3 h-1/2 p-2' type='number' placeholder="Add Price" />
-
-                <div onClick={() => { handleAddmembership() }} className='text-lg border-2 p-1 w-auto mt-0 rounded-xl cursor-pointer hover:bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500'> Add +</div>
+            <div className='flex flex-wrap gap-6 mb-10 items-center justify-center'>
+                <div className='flex flex-col items-start'>
+                    <label className='text-lg font-semibold mb-2'>No. of Months</label>
+                    <input
+                        value={inputField.months}
+                        onChange={(event) => handleOnChange(event, "months")}
+                        className='border-2 rounded-lg text-lg w-32 h-10 p-2'
+                        type='number'
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                        placeholder="Add No."
+                    />
+                </div>
+                <div className='flex flex-col items-start'>
+                    <label className='text-lg font-semibold mb-2'>Price</label>
+                    <input
+                        value={inputField.price}
+                        onChange={(event) => handleOnChange(event, "price")}
+                        className='border-2 rounded-lg text-lg w-32 h-10 p-2'
+                        type='number'
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                        placeholder="Add P"
+                    />
+                </div>
+                <div
+                    onClick={() => { handleAddmembership() }}
+                    className='flex items-center justify-center text-lg border-2 px-6 py-2 rounded-xl cursor-pointer hover:bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 font-semibold'
+                    style={{ height: '56px', marginTop: '24px' }}
+                >
+                    Add +
+                </div>
             </div>
             <ToastContainer />
         </div >

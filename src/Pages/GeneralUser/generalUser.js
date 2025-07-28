@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Link } from 'react-router-dom';
 import MemberCard from '../../Components/MemberCard/memberCard';
-import {getMonthlyJoined,threeDayExpire,fourToSevenDaysExpire,expired,inActiveMember} from './data'; // Assuming this is the correct import path for the data fetching function
+import { getMonthlyJoined, threeDayExpire, fourToSevenDaysExpire, expired, inActiveMember } from './data'; // Assuming this is the correct import path for the data fetching function
 
 const GeneralUser = () => {
     const [header, setHeader] = useState("");
@@ -26,7 +26,7 @@ const GeneralUser = () => {
                 setHeader("Expring In 3 Days Members");
                 var datas = await threeDayExpire();
                 setData(datas.members);
-                
+
                 break;
 
             case "fourToSevenDaysExpire":
@@ -52,6 +52,7 @@ const GeneralUser = () => {
                 break;
         }
     };
+    
 
     return (
         <div className='text-black p-5 w-3/4 flex-col'>
@@ -62,7 +63,8 @@ const GeneralUser = () => {
                 >
                     <ArrowBackIcon /> Back To Dashboard
                 </Link>
-            </div>
+            </div>            
+
 
             <div className='mt-5 text-xl text-slate-900'>
                 {header}
