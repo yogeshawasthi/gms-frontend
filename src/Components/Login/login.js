@@ -1,12 +1,15 @@
 // src/Components/Login/login.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
+import axios from 'axios';
 
 const Login = ({ onToggle }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [loginField, setLoginField] = useState({ userName: "", password: "" });
+  const [verifyEmail, setVerifyEmail] = useState("");
+  const [verifying, setVerifying] = useState(false);
+  const [showVerifySection, setShowVerifySection] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async () => {
@@ -25,6 +28,29 @@ const Login = ({ onToggle }) => {
 
   const handleOnChange = (event, name) => {
     setLoginField({ ...loginField, [name]: event.target.value });
+  };
+
+  const handleVerifyEmail = async () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!verifyEmail) {
+      toast.error("Please enter your email.");
+      return;
+    }
+    if (!emailRegex.test(verifyEmail)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+    setVerifying(true);
+    try {
+      // Call the backend to send the verification email
+      const res = await axios.post("http://localhost:4000/auth/send-verification-email", { email: verifyEmail });
+      toast.success(res.data.message || "Verification email sent. Please check your inbox.");
+      setVerifyEmail("");
+      setShowVerifySection(false);
+    } catch (err) {
+      toast.error(err.response?.data?.error || "Error sending verification email.");
+    }
+    setVerifying(false);
   };
 
   return (
@@ -75,6 +101,37 @@ const Login = ({ onToggle }) => {
           Click here
         </span>
       </p>
+
+      {/* Button to show/hide Verify Email Section */}
+      <div className="mt-8 text-center">
+        <button
+          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          onClick={() => setShowVerifySection(!showVerifySection)}
+        >
+          {showVerifySection ? "Hide verify email" : "Verify your email"}
+        </button>
+      </div>
+
+      {/* Expanding/Collapsing Verify Email Section */}
+      {showVerifySection && (
+        <div className="transition-all duration-300 ease-in-out mt-4 flex flex-col items-center">
+          <label className="font-bold block mb-2 text-black">Verify your email</label>
+          <input
+            type="email"
+            value={verifyEmail}
+            onChange={e => setVerifyEmail(e.target.value)}
+            className="w-2/3 p-2 rounded-lg mb-2 border"
+            placeholder="Enter your email"
+          />
+          <button
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            onClick={handleVerifyEmail}
+            disabled={verifying}
+          >
+            {verifying ? "Verifying..." : "Send"}
+          </button>
+        </div>
+      )}
     </div>
   );
 };

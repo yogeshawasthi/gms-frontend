@@ -230,6 +230,14 @@ const Addmembers = ({ }) => {
             toast.error("Joining date is required");
             return;
           }
+          // Prevent past dates
+          const today = new Date();
+          today.setHours(0,0,0,0);
+          const joiningDate = new Date(inputField.joiningDate);
+          if (joiningDate < today) {
+            toast.error("Joining date cannot be in the past");
+            return;
+          }
           // Membership validation
           if (!inputField.membership || inputField.membership === "") {
             toast.error("Please select a membership plan");

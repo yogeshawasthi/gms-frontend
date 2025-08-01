@@ -5,7 +5,9 @@ import ForgotPassword from '../../Forgotpassword/forgotPassword';
 import axios from 'axios';
 import Stack from '@mui/material/Stack';
 import LinearProgress from '@mui/material/LinearProgress';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast, ToastContainer, Slide } from 'react-toastify';
+import loaderImage from '../../../images/loader2.webp';
+import Loader from '../../Loader/loader';
 
 const SignUp = ({ onToggle }) => {
     const [showPassword, setShowPassword] = useState(false);
@@ -18,7 +20,8 @@ const SignUp = ({ onToggle }) => {
         profilePic: "https://img.freepik.com/free-photo/low-angle-view-unrecognizable-muscular-build-man-preparing-lifting-barbell-health-club_637285-2497.jpg?t=st=1744370811~exp=1744374411~hmac=23008917d736bff1e1ab8072d9f52cb4554ac273bf45b657494358edc3de82c3&w=1380"
     });
 
-    const [loaderImage, setLoaderImage] = useState(false);
+    const [loaderImageState, setLoaderImageState] = useState(false); // for image upload
+    const [registering, setRegistering] = useState(false); // for registration loader
 
     const handleOnChange = (event, name) => {
         const value = name === "email" ? event.target.value.toLowerCase() : event.target.value;
@@ -30,7 +33,7 @@ const SignUp = ({ onToggle }) => {
     };
 
     const uploadImage = async (event) => {
-        setLoaderImage(true);
+        setLoaderImageState(true);
         const files = event.target.files;
         const data = new FormData();
         data.append('file', files[0]);
@@ -39,11 +42,11 @@ const SignUp = ({ onToggle }) => {
         try {
             const response = await axios.post("https://api.cloudinary.com/v1_1/dnbtfydel/image/upload", data);
             const imageUrl = response.data.url;
-            setLoaderImage(false);
+            setLoaderImageState(false);
             setInputField({ ...inputField, profilePic: imageUrl });
         } catch (err) {
             console.log(err);
-            setLoaderImage(false);
+            setLoaderImageState(false);
         }
     };
 
@@ -76,26 +79,63 @@ const SignUp = ({ onToggle }) => {
 
         return true;
     };
-
     const handleRegister = async () => {
         if (!validateForm()) return;
 
+        setRegistering(true); // Show loader
+
         await axios.post("http://localhost:4000/auth/register", inputField)
             .then((resp) => {
-                const successMsg = resp.data.message;
-                toast.success(successMsg);
+                // Show toasts one after another with delays and effects
+                toast.success("Your Registration of Gym has been received", {
+                    autoClose: 4000,
+                    transition: Slide
+                });
+                setTimeout(() => {
+                    toast.info("Please wait for our admin to approve your gym", {
+                        autoClose: 4000,
+                        transition: Slide
+                    });
+                }, 4200);
+                setTimeout(() => {
+                    toast.error("Please Verify your email. Verification email was sent. Thank You", {
+                        autoClose: 4000,
+                        transition: Slide
+                    });
+                }, 8400);
                 setTimeout(() => {
                     window.location.reload();
-                }, 5500); // 1.5 seconds delay for toast to show
+                }, 13000);
             })
             .catch(err => {
                 const errorMessage = err.response?.data?.error || "Registration failed";
-                toast.error(errorMessage);
+                toast.error(errorMessage, {
+                    autoClose: 5000,
+                    transition: Slide // <-- FIXED HERE
+                });
+            })
+            .finally(() => {
+                setRegistering(false); // Hide loader
             });
     };
 
     return (
         <div className='customSignup w-1/3 p-10 mt-20 ml-20 bg-gray-50 bg-opacity-35 h-[450px] overflow-y-auto rounded-3xl '>
+            {registering && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 z-50 w-screen h-screen">
+                    <img
+                        src={loaderImage}
+                        alt="Loading..."
+                        style={{
+                            width: "100vw",
+                            height: "100vh",
+                            objectFit: "contain",
+                            background: "transparent"
+                        }}
+                    />
+                </div>
+            )}
+
             <div className='font-sans text-white text-center text-3xl font-bold'>Register Your Gym</div>
 
             <label className='text-white block font-bold pt-4'>E-mail</label>
@@ -143,12 +183,11 @@ const SignUp = ({ onToggle }) => {
                 </span>
             </div>
 
-
             <label className='text-white font-bold block mb-2'>Profile Picture</label>
             <input type='file' onChange={(e) => { uploadImage(e) }} className='w-full mb-6 p-2 rounded-lg' />
 
             {
-                loaderImage && (
+                loaderImageState && (
                     <Stack sx={{ width: '100%', color: 'grey.500' }} spacing={2}>
                         <LinearProgress color="secondary" />
                     </Stack>
