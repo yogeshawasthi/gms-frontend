@@ -27,16 +27,16 @@ const Addmembers = ({ }) => {
 
   const fetchMembership = async () => {
     await axios.get('http://localhost:4000/plans/getMembership', {
-        withCredentials: true,
+      withCredentials: true,
     })
-        .then((response) => {
-            setMembershipList(response.data.membership);
-            // Do NOT set default selected plan here
-        })
-        .catch((err) => {
-            console.error(err);
-            toast.error('Error fetching membership details');
-        });
+      .then((response) => {
+        setMembershipList(response.data.membership);
+        // Do NOT set default selected plan here
+      })
+      .catch((err) => {
+        console.error(err);
+        toast.error('Error fetching membership details');
+      });
   };
 
   useEffect(() => {
@@ -51,26 +51,26 @@ const Addmembers = ({ }) => {
 
   console.log(inputField)
 
-   const handleRegisterButton = async () => {
-  try {
-    const res = await axios.post('http://localhost:4000/members/register-member', inputField, { withCredentials: true });
-    toast.success("Added Successfully");
+  const handleRegisterButton = async () => {
+    try {
+      const res = await axios.post('http://localhost:4000/members/register-member', inputField, { withCredentials: true });
+      toast.success("Added Successfully");
 
-    // Find selected plan details
-    const plan = membershipList.find(m => m._id === inputField.membership);
+      // Find selected plan details
+      const plan = membershipList.find(m => m._id === inputField.membership);
 
-    // Generate PDF invoice
-    generateInvoicePDF(inputField, plan);
+      // Generate PDF invoice
+      generateInvoicePDF(inputField, plan);
 
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
-  } catch (err) {
-    console.error(err);
-    toast.error(` Use Diffrent Mobile number`);
-  }
-};
-  
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+    } catch (err) {
+      console.error(err);
+      toast.error(` Use Diffrent Mobile number`);
+    }
+  };
+
 
   const uploadImage = async (event) => {
     setImageLoader(true);
@@ -123,7 +123,7 @@ const Addmembers = ({ }) => {
     doc.text(`Next Bill Date: ${nextBillDate.toLocaleDateString()}`, 20, 110);
 
     doc.save(`${member.name}_invoice.pdf`);
-};
+  };
 
   return (
     <div className="text-black">
@@ -232,7 +232,7 @@ const Addmembers = ({ }) => {
           }
           // Prevent past dates
           const today = new Date();
-          today.setHours(0,0,0,0);
+          today.setHours(0, 0, 0, 0);
           const joiningDate = new Date(inputField.joiningDate);
           if (joiningDate < today) {
             toast.error("Joining date cannot be in the past");

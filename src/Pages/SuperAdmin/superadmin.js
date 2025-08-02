@@ -68,7 +68,7 @@ const SuperAdmin = () => {
     try {
       await axios.post("http://localhost:4000/auth/superadmin/change-status", { gymId, status: "rejected" }, { withCredentials: true });
       setGyms(gyms => gyms.filter(gym => gym._id !== gymId));
-      toast.success("Gym rejected!");
+      toast.error("Gym rejected!");
     } catch (err) {
       toast.error(err.response?.data?.error || "Rejection failed");
     } finally {
