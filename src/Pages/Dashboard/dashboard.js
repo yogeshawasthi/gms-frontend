@@ -7,6 +7,7 @@ import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import ErrorIcon from '@mui/icons-material/Error';
 import ReportIcon from '@mui/icons-material/Report';
 import { Link } from 'react-router-dom';
+import { jwtDecode } from "jwt-decode";
 
 const Dashboard = () => {
   const [accordianDashboard, setAccordianDashboard] = useState(false);
@@ -30,6 +31,16 @@ const Dashboard = () => {
     localStorage.setItem('func', value);
   }
 
+  // Get gymId from token
+  let gymId = "";
+  const token = localStorage.getItem("token");
+  if (token) {
+    const decoded = jwtDecode(token);
+    gymId = decoded.gym_id;
+  }
+
+
+
   return (
     <div className='w-3/4 text-black p-5 relative'>
       <div className='w-full bg-slate-900 text-white rounded-lg flex  p-3 justify-between items-center'>
@@ -38,6 +49,12 @@ const Dashboard = () => {
         <img className='w-8 h-8 rounded-3xl border-2' src='https://static.vecteezy.com/system/resources/previews/002/265/650/large_2x/unknown-person-user-icon-for-web-vector.jpg' alt='Image' />
 
       </div>
+      <Link
+        to={`/gym-report/${gymId}`}
+        className="bg-green-600 hover:bg-green-800 text-white font-semibold py-2 px-6 rounded-lg shadow absolute right-8 top-8"
+      >
+        Download Report
+      </Link>
 
       {
         accordianDashboard && <div ref={ref} className=' absolute p-3 bg-slate-900 text-white rounded-xl text-lg font-extralight'>
@@ -50,13 +67,13 @@ const Dashboard = () => {
 
 
 
-      {/* // ths is the card block */}
+        {/* // ths is the card block */}
         <Link to={'/member'} className='w-full h-fit border-2 bg-white rounded-lg cursor-pointer'>
           <div className='h-3 rounded-t-lg bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500'></div>
 
 
           <div className='py-7 px-5 flex-col justify-center items-center w-full text-center rounded-b-lg hover:bg-slate-900 hover:text-white '>
-            <PeopleAltIcon sx={{color:"green",fontSize:"50px"}} />
+            <PeopleAltIcon sx={{ color: "green", fontSize: "50px" }} />
             <p className='text-xl my-3 font-semibold font-mono'>Joined Members</p>
           </div>
         </Link>
@@ -76,7 +93,7 @@ const Dashboard = () => {
 
 
           <div className='py-7 px-5 flex-col justify-center items-center w-full text-center rounded-b-lg hover:bg-slate-900 hover:text-white '>
-            <AccessAlarmIcon sx={{color:"red",fontSize:"50px"}} />
+            <AccessAlarmIcon sx={{ color: "red", fontSize: "50px" }} />
             <p className='text-xl my-3 font-semibold font-mono'>Expiring Within 3 Days</p>
           </div>
         </Link>
@@ -101,12 +118,12 @@ const Dashboard = () => {
           </div>
         </Link>
 
-        <Link to={'/specific/inactive-member'} onClick={() => handleOnClickMenu("inActiveMember")}  className='w-full h-fit border-2 bg-white rounded-lg cursor-pointer'>
+        <Link to={'/specific/inactive-member'} onClick={() => handleOnClickMenu("inActiveMember")} className='w-full h-fit border-2 bg-white rounded-lg cursor-pointer'>
           <div className='h-3 rounded-t-lg bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500'></div>
 
 
           <div className='py-7 px-5 flex-col justify-center items-center w-full text-center rounded-b-lg hover:bg-slate-900 hover:text-white '>
-            < ReportIcon sx={{color:"brown",fontSize:"50px"}} />
+            < ReportIcon sx={{ color: "brown", fontSize: "50px" }} />
             <p className='text-xl my-3 font-semibold font-mono'>InActive Members</p>
           </div>
         </Link>

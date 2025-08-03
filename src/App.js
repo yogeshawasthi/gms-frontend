@@ -10,6 +10,8 @@ import MemberDetail from './Pages/MemberDetail/memberDetail.js';
 import VerifyEmail from './Pages/VerfiyEmail/verifyemail.js';
 import 'react-toastify/dist/ReactToastify.css';
 import SuperAdmin from './Pages/SuperAdmin/superadmin.js';
+import GymReport from './Pages/Report/GymReport.js';
+import Report from './Pages/Report/Report.js';
 
 
 function App() {
@@ -67,6 +69,7 @@ function App() {
           <Route path="/member/:id" element={<MemberDetail />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/superadmin" element={<SuperAdmin />} />
+          <Route path="/gym-report/:gymId" element={<GymReport />} />
         </Routes>
       </div>
     )

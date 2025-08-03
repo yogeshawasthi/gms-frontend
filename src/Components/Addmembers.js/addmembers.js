@@ -61,6 +61,7 @@ const Addmembers = ({ }) => {
 
       // Generate PDF invoice
       generateInvoicePDF(inputField, plan);
+      toast.success("Invoice Generated Successfully");
 
       setTimeout(() => {
         window.location.reload();
@@ -99,30 +100,126 @@ const Addmembers = ({ }) => {
 
   const generateInvoicePDF = (member, plan) => {
     const doc = new jsPDF();
+
+    // Colors
+    const primary = [37, 99, 235]; // blue-600
+    const accent = [16, 185, 129]; // green-500
+    const light = [239, 246, 255]; // blue-50
+    const yellow = [251, 191, 36]; // yellow-400
+
+    // Header
+    doc.setFillColor(...primary);
+    doc.rect(0, 0, 210, 30, "F");
+    doc.setTextColor(255, 255, 255);
     doc.setFontSize(22);
-    doc.text('Gym Joining Invoice', 20, 20);
+    doc.setFont("helvetica", "bold");
+    doc.text("Gym Joining Invoice", 105, 18, { align: "center" });
 
-    doc.setFontSize(16);
-    // doc.text('Gym Name: Gym World', 20, 32);
+    let y = 38;
 
-    doc.setFontSize(12);
-    doc.text(`Name: ${member.name}`, 20, 50);
-    doc.text(`Mobile No: ${member.mobileNo}`, 20, 60);
-    doc.text(`Address: ${member.address}`, 20, 70);
-    doc.text(`Joining Date: ${member.joiningDate}`, 20, 80);
-    doc.text(`Membership Plan: ${plan.months} Months`, 20, 90);
+    // Card background first
+    doc.setFillColor(...light);
+    doc.roundedRect(10, y, 190, 80, 5, 5, "F");
 
-    // Print price clearly
-    doc.setFontSize(14);
-    doc.text(`Price: ${plan.price}`, 20, 100);
+    // Draw profile picture as a circle avatar, overlapping the card
+    function drawAvatarAndContent() {
+      if (member.profilePic) {
+        doc.setDrawColor(255, 255, 255);
+        doc.setLineWidth(2);
+        // Draw white circle border for avatar
+        doc.circle(180, y + 15, 18, "S");
+        doc.addImage(member.profilePic, "JPEG", 162, y - 3, 36, 36, undefined, "FAST");
+      }
+      drawContent();
+    }
 
-    doc.setFontSize(12);
-    // Calculate next bill date
-    const joinDate = new Date(member.joiningDate);
-    const nextBillDate = new Date(joinDate.setMonth(joinDate.getMonth() + plan.months));
-    doc.text(`Next Bill Date: ${nextBillDate.toLocaleDateString()}`, 20, 110);
+    function drawContent() {
+      // Member Info
+      doc.setTextColor(37, 99, 235);
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text("Member Details", 18, y + 10);
 
-    doc.save(`${member.name}_invoice.pdf`);
+      doc.setFontSize(12);
+      doc.setTextColor(0, 0, 0);
+      doc.setFont("helvetica", "normal");
+      doc.text(`Name:`, 18, y + 22);
+      doc.setFont("helvetica", "bold");
+      doc.text(`${member.name}`, 45, y + 22);
+
+      doc.setFont("helvetica", "normal");
+      doc.text(`Mobile No:`, 18, y + 32);
+      doc.setFont("helvetica", "bold");
+      doc.text(`${member.mobileNo}`, 45, y + 32);
+
+      doc.setFont("helvetica", "normal");
+      doc.text(`Address:`, 18, y + 42);
+      doc.setFont("helvetica", "bold");
+      doc.text(`${member.address}`, 45, y + 42);
+
+      doc.setFont("helvetica", "normal");
+      doc.text(`Joining Date:`, 18, y + 52);
+      doc.setFont("helvetica", "bold");
+      doc.text(`${member.joiningDate}`, 45, y + 52);
+
+      doc.setFont("helvetica", "normal");
+      doc.text(`Membership Plan:`, 18, y + 62);
+      doc.setFont("helvetica", "bold");
+      doc.text(`${plan.months} Months`, 60, y + 62);
+
+      // Price and Next Bill Date Highlights (side by side, with gap)
+      const priceBoxX = 18;
+      const boxY = y + 85; // Increased Y for more space below details
+      const boxH = 18;
+      const boxW = 75;
+      const gap = 12; // Gap between boxes
+      const nextBillBoxX = priceBoxX + boxW + gap;
+
+      // Price Box
+      doc.setFillColor(16, 185, 129); // accent
+      doc.roundedRect(priceBoxX, boxY, boxW, boxH, 4, 4, "F");
+      doc.setFontSize(15);
+      doc.setTextColor(255, 255, 255);
+      doc.setFont("helvetica", "bold");
+      doc.text(`Price: ${plan.price}`, priceBoxX + boxW / 2, boxY + 12, { align: "center" });
+
+      // Next Bill Date Box
+      const joinDate = new Date(member.joiningDate);
+      const nextBillDate = new Date(joinDate.setMonth(joinDate.getMonth() + plan.months));
+      doc.setFillColor(251, 191, 36); // yellow-400
+      doc.roundedRect(nextBillBoxX, boxY, boxW, boxH, 4, 4, "F");
+      doc.setFontSize(13);
+      doc.setTextColor(0, 0, 0);
+      doc.setFont("helvetica", "bold");
+      doc.text(`Next Bill: ${nextBillDate.toLocaleDateString()}`, nextBillBoxX + boxW / 2, boxY + 12, { align: "center" });
+
+      // Footer
+      doc.setFillColor(37, 99, 235);
+      doc.rect(0, 280, 210, 17, "F");
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(11);
+      doc.setFont("helvetica", "normal");
+      doc.text("Thank you for joining our gym! Stay healthy, stay fit.", 105, 290, { align: "center" });
+
+      doc.save(`${member.name}_invoice.pdf`);
+      // toast.success("Invoice PDF downloaded!");
+    }
+
+    // Load avatar image if present, else just draw content
+    if (member.profilePic) {
+      const img = new window.Image();
+      img.crossOrigin = "Anonymous";
+      img.src = member.profilePic;
+      img.onload = function () {
+        member.profilePic = img;
+        drawAvatarAndContent();
+      };
+      img.onerror = function () {
+        drawContent();
+      };
+    } else {
+      drawContent();
+    }
   };
 
   return (
@@ -212,7 +309,7 @@ const Addmembers = ({ }) => {
             return;
           }
           if (!/^[A-Za-z\s]+$/.test(inputField.name.trim())) {
-            toast.error("Name must contain only letters");
+            toast.error("Name must contain only letters and spaces");
             return;
           }
           // Mobile validation
@@ -225,12 +322,11 @@ const Addmembers = ({ }) => {
             toast.error("Address is required");
             return;
           }
-          // Joining date validation
+          // Joining date validation: must not be in the past
           if (!inputField.joiningDate) {
             toast.error("Joining date is required");
             return;
           }
-          // Prevent past dates
           const today = new Date();
           today.setHours(0, 0, 0, 0);
           const joiningDate = new Date(inputField.joiningDate);
