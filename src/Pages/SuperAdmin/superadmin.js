@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import SuperAdminLogin from "../../Components/Superadmin/superadminlogin";
-import { useNavigate } from "react-router-dom"; // <-- Add this import
+import { useNavigate, useLocation } from "react-router-dom";
 
 const SuperAdmin = () => {
   const [email, setEmail] = useState("");
@@ -12,17 +12,18 @@ const SuperAdmin = () => {
   const [actionLoading, setActionLoading] = useState(false);
   const [approvedGyms, setApprovedGyms] = useState([]);
   const [showApproved, setShowApproved] = useState(false);
-  const navigate = useNavigate(); // <-- Add this line
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // Check localStorage on mount
   useEffect(() => {
     const isSuperAdmin = localStorage.getItem("isSuperAdmin");
     if (isSuperAdmin === "true") {
       setLoggedIn(true);
-    } else {
-      navigate("/superadmin/login"); // <-- Navigate to login if not logged in
+    } else if (location.pathname !== "/superadmin/login") {
+      navigate("/superadmin/login");
     }
-  }, [navigate]);
+  }, [navigate, location.pathname]);
 
   // Fetch pending gyms when logged in
   useEffect(() => {
@@ -35,7 +36,7 @@ const SuperAdmin = () => {
         })
         .catch(err => {
           if (err.response && err.response.status === 401) {
-            handleAuthError();
+            // handleAuthError();
           } else {
             toast.error("Failed to fetch gyms");
           }
@@ -104,12 +105,12 @@ const SuperAdmin = () => {
     }
   };
 
-  // Utility to handle 401 errors
-  const handleAuthError = () => {
-    localStorage.removeItem("isSuperAdmin");
-    setLoggedIn(false);
-    navigate("/superadmin/login");
-  };
+  // // Utility to handle 401 errors
+  // const handleAuthError = () => {
+  //   localStorage.removeItem("isSuperAdmin");
+  //   setLoggedIn(false);
+  //   navigate("/superadmin/login");
+  // };
 
   if (!loggedIn) {
     return (
