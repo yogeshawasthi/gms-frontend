@@ -9,11 +9,11 @@ const MemberDetail = () => {
   const [status, setStatus] = useState("Pending");
   const [renew, setRenew] = useState(false);
   const [member, setMember] = useState(null);
-  const [data,setData] = useState(null);
+  const [data, setData] = useState(null);
   const navigate = useNavigate();
   const { id } = useParams();
-  const [membership,setMembership] = useState([]);
-  const[planMember,setPlanMember] = useState("");
+  const [membership, setMembership] = useState([]);
+  const [planMember, setPlanMember] = useState("");
 
   useEffect(() => {
     fetchData();
@@ -21,23 +21,23 @@ const MemberDetail = () => {
   }, []);
 
   const fetchMembership = async () => {
-      axios.get(`http://localhost:4000/plans/getMembership`, { withCredentials: true })
-        .then((response) => {
-          setMembership(response.data.membership);
-          setPlanMember(response.data.membership[0]._id);
-          console.log("Membership data fetched successfully:", response.data.membership);
-        }).catch((error) => {
-          console.error("Error fetching membership data:", error);
-          toast.error("Failed to fetch membership data.");
-        });
-    };
+    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/plans/getMembership`, { withCredentials: true })
+      .then((response) => {
+        setMembership(response.data.membership);
+        setPlanMember(response.data.membership[0]._id);
+        console.log("Membership data fetched successfully:", response.data.membership);
+      }).catch((error) => {
+        console.error("Error fetching membership data:", error);
+        toast.error("Failed to fetch membership data.");
+      });
+  };
 
-      
+
 
   const fetchData = async () => {
     console.log("fetchData called with id:", id);
     await axios
-      .get(`http://localhost:4000/members/get-member/${id}`, { withCredentials: true })
+      .get(`${process.env.NEXT_PUBLIC_API_URL}/members/get-member/${id}`, { withCredentials: true })
       .then(async (response) => {
         setData(response.data.member);
         setMember(response.data.member || response.data);
@@ -49,7 +49,7 @@ const MemberDetail = () => {
           // Update status in backend if not already inactive
           if (response.data.member?.status !== "Inactive") {
             await axios.post(
-              `http://localhost:4000/members/change-status/${id}`,
+              `${process.env.NEXT_PUBLIC_API_URL}/members/change-status/${id}`,
               { status: "Inactive" },
               { withCredentials: true }
             );
@@ -70,7 +70,7 @@ const MemberDetail = () => {
     let statuss = status === "Active" ? "Inactive" : "Active";
     try {
       await axios.post(
-        `http://localhost:4000/members/change-status/${id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/members/change-status/${id}`,
         { status: statuss },
         { withCredentials: true }
       );
@@ -95,7 +95,7 @@ const MemberDetail = () => {
 
   const handleRenewSaveBtn = async () => {
     await axios.put(
-      `http://localhost:4000/members/update-member-plan/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/members/update-member-plan/${id}`,
       { membership: planMember },
       { withCredentials: true }
     )
@@ -106,7 +106,7 @@ const MemberDetail = () => {
 
         // Set status to Active after successful renew
         await axios.post(
-          `http://localhost:4000/members/change-status/${id}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/members/change-status/${id}`,
           { status: "Active" },
           { withCredentials: true }
         );
@@ -189,11 +189,10 @@ const MemberDetail = () => {
                     toast.error("Cannot renew while status is not Inactive or Pending!");
                   }
                 }}
-                className={`mt-1 rounded-lg p-3 border-2 border-slate-900 text-center ${
-                  (status === "Inactive" || status === "Pending")
+                className={`mt-1 rounded-lg p-3 border-2 border-slate-900 text-center ${(status === "Inactive" || status === "Pending")
                     ? "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white cursor-pointer hover:text-white hover:bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"
                     : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                } w-full md:w-1/2`}
+                  } w-full md:w-1/2`}
                 style={{ pointerEvents: (status === "Inactive" || status === "Pending") ? "auto" : "none" }}
               >
                 Renew
@@ -210,7 +209,7 @@ const MemberDetail = () => {
                           <option value={item._id} key={index}>{item.months} Months Membership</option>
                         ))}
                       </select>
-                      <div className={'mt-3 rounded-lg p-3 border-2 border-slate-900 text-center w-1/2 mx-auto cursor-pointer hover:text-white hover:bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500'}onClick={()=>{handleRenewSaveBtn()}}> Save</div>
+                      <div className={'mt-3 rounded-lg p-3 border-2 border-slate-900 text-center w-1/2 mx-auto cursor-pointer hover:text-white hover:bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500'} onClick={() => { handleRenewSaveBtn() }}> Save</div>
                     </div>
                   </div>
                 </div>
@@ -225,7 +224,7 @@ const MemberDetail = () => {
           onClick={async () => {
             if (window.confirm("Are you sure you want to delete this member?")) {
               try {
-                await axios.delete(`http://localhost:4000/members/${id}`, { withCredentials: true });
+                await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/members/${id}`, { withCredentials: true });
                 toast.success("Member deleted successfully!");
                 setTimeout(() => {
                   navigate(-1); // Go back after deletion

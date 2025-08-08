@@ -26,7 +26,7 @@ const Addmembers = ({ }) => {
 
 
   const fetchMembership = async () => {
-    await axios.get('http://localhost:4000/plans/getMembership', {
+    await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/plans/getMembership`, {
       withCredentials: true,
     })
       .then((response) => {
@@ -53,7 +53,7 @@ const Addmembers = ({ }) => {
 
   const handleRegisterButton = async () => {
     try {
-      const res = await axios.post('http://localhost:4000/members/register-member', inputField, { withCredentials: true });
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/members/register-member`, inputField, { withCredentials: true });
       toast.success("Added Successfully");
 
       // Find selected plan details

@@ -84,7 +84,7 @@ const SignUp = ({ onToggle }) => {
 
         setRegistering(true); // Show loader
 
-        await axios.post("http://localhost:4000/auth/register", inputField)
+        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, inputField)
             .then((resp) => {
                 // Show toasts one after another with delays and effects
                 toast.success("Your Registration of Gym has been received", {

@@ -3,7 +3,7 @@ import axios from "axios";
 
 const getMonthlyJoined = async () => {
     try {
-        const response = await axios.get('http://localhost:4000/members/monthly-member', { withCredentials: true });
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/members/monthly-member`, { withCredentials: true });
         return response.data;
     } catch (error) {
         console.error("Error fetching monthly joined members:", error);
@@ -13,7 +13,7 @@ const getMonthlyJoined = async () => {
 
 const threeDayExpire = async () => {
     try {
-        const response = await axios.get('http://localhost:4000/members/within-3-days-expiring', { withCredentials: true });
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/members/within-3-days-expiring`, { withCredentials: true });
         return response.data;
     } catch (error) {
         console.error("Error fetching members expiring in 3 days:", error);
@@ -23,30 +23,30 @@ const threeDayExpire = async () => {
 
 const fourToSevenDaysExpire = async () => {
     try {
-        const response = await axios.get('http://localhost:4000/members/within-4-7-expiring', { withCredentials: true });
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/members/within-4-7-expiring`, { withCredentials: true });
         return response.data;
     } catch (error) {
-        console.error("Error fetching members expiring in 3 days:", error);
+        console.error("Error fetching members expiring in 4-7 days:", error);
         return [];
     }   
 } 
 
 const expired = async () => {
     try {
-        const response = await axios.get('http://localhost:4000/members/expired-member', { withCredentials: true });
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/members/expired-member`, { withCredentials: true });
         return response.data;
     } catch (error) {
-        console.error("Error fetching members expiring in 3 days:", error);
+        console.error("Error fetching expired members:", error);
         return [];
     }   
 } 
 
 const inActiveMember = async () => {
     try {
-        const response = await axios.get('http://localhost:4000/members/inactive-member', { withCredentials: true });
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/members/inactive-member`, { withCredentials: true });
         return response.data;
     } catch (error) {
-        console.error("Error fetching members expiring in 3 days:", error);
+        console.error("Error fetching inactive members:", error);
         return [];
     }   
 } 
