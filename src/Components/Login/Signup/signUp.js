@@ -111,8 +111,17 @@ const SignUp = ({ onToggle }) => {
                 const errorMessage = err.response?.data?.error || "Registration failed";
                 toast.error(errorMessage, {
                     autoClose: 5000,
-                    transition: Slide // <-- FIXED HERE
+                    transition: Slide
                 });
+                // Check for your specific backend error message
+                if (
+                    errorMessage.includes("Failed to send verification email") ||
+                    errorMessage.includes("wait for approval")
+                ) {
+                    setTimeout(() => {
+                        window.location.href = "/"; // or use window.location.reload();
+                    }, 5200); // Wait for toast to finish
+                }
             })
             .finally(() => {
                 setRegistering(false); // Hide loader
