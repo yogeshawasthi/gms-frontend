@@ -84,7 +84,7 @@ const SignUp = ({ onToggle }) => {
 
         setRegistering(true); // Show loader
 
-        await axios.post(`${REACT_APP_API_URL}/auth/register`, inputField)
+        await axios.post(`${process.env.REACT_APP_API_URL}/auth/register`, inputField)
             .then((resp) => {
                 // Show toasts one after another with delays and effects
                 toast.success("Your Registration of Gym has been received", {

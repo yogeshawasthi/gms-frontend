@@ -44,7 +44,7 @@ const Member = () => {
   const fetchData = async (skip, limits) => {
     setLoading(true); // Start loading
     // Fetching members data from the server
-    await axios.get(`${REACT_APP_API_URL}/members/all-member?skip=${skip}&limit=${limits}`, {
+    await axios.get(`${process.env.REACT_APP_API_URL}/members/all-member?skip=${skip}&limit=${limits}`, {
       withCredentials: true,
     }).then((response) => {
       console.log(response.data);
@@ -120,7 +120,7 @@ const Member = () => {
   const handleSearchData = async () => {
     if (search !== "") {
       setIsSearchModeOn(true);
-      await axios.get(`${REACT_APP_API_URL}/members/searched-member?searchTerm=${search}`, { withCredentials: true }).then((response) => {
+      await axios.get(`${process.env.REACT_APP_API_URL}/members/searched-member?searchTerm=${search}`, { withCredentials: true }).then((response) => {
         console.log(response)
         let members = response.data.membes;// console is rendereing membes not as members that was error
         if (!Array.isArray(members)) {

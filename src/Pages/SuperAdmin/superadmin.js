@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import SuperAdminLogin from "../../Components/Superadmin/superadminlogin";
+import { useNavigate } from "react-router-dom"; // <-- Add this import
 
 const SuperAdmin = () => {
   const [email, setEmail] = useState("");
@@ -11,20 +12,23 @@ const SuperAdmin = () => {
   const [actionLoading, setActionLoading] = useState(false);
   const [approvedGyms, setApprovedGyms] = useState([]);
   const [showApproved, setShowApproved] = useState(false);
+  const navigate = useNavigate(); // <-- Add this line
 
   // Check localStorage on mount
   useEffect(() => {
     const isSuperAdmin = localStorage.getItem("isSuperAdmin");
     if (isSuperAdmin === "true") {
       setLoggedIn(true);
+    } else {
+      navigate("/superadmin/login"); // <-- Navigate to login if not logged in
     }
-  }, []);
+  }, [navigate]);
 
   // Fetch pending gyms when logged in
   useEffect(() => {
     if (loggedIn && !showApproved) {
       axios
-        .get(`${REACT_APP_API_URL}/auth/superadmin/get-pending-gyms`, { withCredentials: true })
+        .get(`${process.env.REACT_APP_API_URL}/auth/superadmin/get-pending-gyms`, { withCredentials: true })
         .then(res => {
           const pendingGyms = res.data.gyms.filter(gym => gym.status === "pending");
           setGyms(pendingGyms);
@@ -37,7 +41,7 @@ const SuperAdmin = () => {
   const fetchApprovedGyms = async () => {
     setActionLoading(true);
     try {
-      const res = await axios.get(`${REACT_APP_API_URL}/auth/superadmin/get-approved-gyms`, { withCredentials: true });
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/superadmin/get-approved-gyms`, { withCredentials: true });
       setApprovedGyms(res.data.gyms || []);
       setShowApproved(true);
     } catch (err) {
@@ -49,7 +53,7 @@ const SuperAdmin = () => {
 
   const handleLogin = async () => {
     try {
-      await axios.post(`${REACT_APP_API_URL}/auth/superadmin/login`, { email, password }, { withCredentials: true });
+      await axios.post(`${process.env.REACT_APP_API_URL}/auth/superadmin/login`, { email, password }, { withCredentials: true });
       localStorage.setItem("isSuperAdmin", "true");
       setLoggedIn(true);
       toast.success("SuperAdmin logged in!");
@@ -59,7 +63,7 @@ const SuperAdmin = () => {
   };
 
   const handleLogout = async () => {
-    await axios.post(`${REACT_APP_API_URL}/auth/superadmin/logout`, {}, { withCredentials: true });
+    await axios.post(`${process.env.REACT_APP_API_URL}/auth/superadmin/logout`, {}, { withCredentials: true });
     localStorage.removeItem("isSuperAdmin");
     setLoggedIn(false);
     setGyms([]);
@@ -71,7 +75,7 @@ const SuperAdmin = () => {
   const handleApprove = async (gymId) => {
     setActionLoading(true);
     try {
-      await axios.post(`${REACT_APP_API_URL}/auth/superadmin/change-status`, { gymId, status: "approved" }, { withCredentials: true });
+      await axios.post(`${process.env.REACT_APP_API_URL}/auth/superadmin/change-status`, { gymId, status: "approved" }, { withCredentials: true });
       setGyms(gyms => gyms.filter(gym => gym._id !== gymId));
       toast.success("Gym approved!");
     } catch (err) {
@@ -84,7 +88,7 @@ const SuperAdmin = () => {
   const handleReject = async (gymId) => {
     setActionLoading(true);
     try {
-      await axios.post(`${REACT_APP_API_URL}/auth/superadmin/change-status`, { gymId, status: "rejected" }, { withCredentials: true });
+      await axios.post(`${process.env.REACT_APP_API_URL}/auth/superadmin/change-status`, { gymId, status: "rejected" }, { withCredentials: true });
       setGyms(gyms => gyms.filter(gym => gym._id !== gymId));
       toast.error("Gym rejected!");
     } catch (err) {

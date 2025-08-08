@@ -14,7 +14,7 @@ const Login = ({ onToggle }) => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post(`${REACT_APP_API_URL}/auth/login`, loginField, { withCredentials: true });
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/login`, loginField, { withCredentials: true });
       localStorage.setItem('gymName', response.data.gym.gymName);
       localStorage.setItem('gymPic', response.data.gym.profilePic);
       localStorage.setItem('isLogin', true);
@@ -43,7 +43,7 @@ const Login = ({ onToggle }) => {
     setVerifying(true);
     try {
       // Call the backend to send the verification email
-      const res = await axios.post(`${REACT_APP_API_URL}/auth/send-verification-email`, { email: verifyEmail });
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/auth/send-verification-email`, { email: verifyEmail });
       toast.success(res.data.message || "Verification email sent. Please check your inbox.");
       setVerifyEmail("");
       setShowVerifySection(false);

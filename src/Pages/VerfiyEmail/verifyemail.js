@@ -12,7 +12,7 @@ const VerifyEmail = () => {
 
     if (token && email) {
       axios
-        .get(`${REACT_APP_API_URL}/auth/verify-email?token=${token}&email=${email}`)
+        .get(`${process.env.REACT_APP_API_URL}/auth/verify-email?token=${token}&email=${email}`)
         .then((res) => setMessage(res.data.message))
         .catch((err) =>
           setMessage(err.response?.data?.error || "Verification failed")

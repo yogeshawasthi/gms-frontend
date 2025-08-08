@@ -15,7 +15,7 @@ const AddmemberShip = ({ handleClose }) => {
     console.log(inputField)
 
     const fetchMembership = async () => {
-        await axios.get(`${REACT_APP_API_URL}/plans/getMembership`, {
+        await axios.get(`${process.env.REACT_APP_API_URL}/plans/getMembership`, {
             params: inputField,
             withCredentials: true
         }).then((res) => {
@@ -48,7 +48,7 @@ const AddmemberShip = ({ handleClose }) => {
             return;
         }
         try {
-            const response = await axios.post(`${REACT_APP_API_URL}/plans/add-membership`, inputField, { withCredentials: true });
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/plans/add-membership`, inputField, { withCredentials: true });
             toast.success(response.data.message)
             // handleClose();
             fetchMembership(); // Refresh the list
@@ -70,7 +70,7 @@ const AddmemberShip = ({ handleClose }) => {
                                     e.stopPropagation();
                                     if (window.confirm("Are you sure you want to delete this plan?")) {
                                         try {
-                                            await axios.delete(`${REACT_APP_API_URL}/plans/delete-membership/${item._id}`, { withCredentials: true });
+                                            await axios.delete(`${process.env.REACT_APP_API_URL}/plans/delete-membership/${item._id}`, { withCredentials: true });
                                             toast.success("Plan deleted!");
                                             fetchMembership();
                                         } catch (err) {

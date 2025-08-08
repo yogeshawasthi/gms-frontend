@@ -15,7 +15,7 @@ const GymReport = () => {
       setLoading(true);
       try {
         const res = await axios.get(
-          `${REACT_APP_API_URL}/auth/gym/${gymId}/report?months=${months}`
+          `${process.env.REACT_APP_API_URL}/auth/gym/${gymId}/report?months=${months}`
         );
         setReport(res.data);
       } catch (err) {
