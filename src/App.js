@@ -52,7 +52,7 @@ function App() {
       }}>
         <Routes>
           <Route path="/superadmin" element={<SuperAdmin />} />
-          {/* <Route path="/superadmin/login" element={<SuperAdminLoginPage />} /> */}
+          <Route path="/superadmin/login" element={<SuperAdminLoginPage />} />
         </Routes>
       </div>
     ) : (
