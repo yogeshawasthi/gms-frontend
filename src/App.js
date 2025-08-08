@@ -54,6 +54,7 @@ function App() {
       }}>
         <Routes>
           <Route path="/superadmin" element={<SuperAdmin />} />
+          <Route path="/superadmin/login" element={<SuperAdminLoginPage />} />
         </Routes>
       </div>
     ) : (
@@ -70,7 +71,7 @@ function App() {
           <Route path="/member/:id" element={<MemberDetail />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/superadmin" element={<SuperAdmin />} />
-          <Route path="/superadmin/login" element={<SuperAdminLoginPage />} />
+          
           <Route path="/gym-report/:gymId" element={<GymReport />} />
         </Routes>
       </div>
