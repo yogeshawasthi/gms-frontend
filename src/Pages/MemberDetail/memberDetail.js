@@ -21,7 +21,7 @@ const MemberDetail = () => {
   }, []);
 
   const fetchMembership = async () => {
-    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/plans/getMembership`, { withCredentials: true })
+    axios.get(`${REACT_APP_API_URL}/plans/getMembership`, { withCredentials: true })
       .then((response) => {
         setMembership(response.data.membership);
         setPlanMember(response.data.membership[0]._id);
@@ -37,7 +37,7 @@ const MemberDetail = () => {
   const fetchData = async () => {
     console.log("fetchData called with id:", id);
     await axios
-      .get(`${process.env.NEXT_PUBLIC_API_URL}/members/get-member/${id}`, { withCredentials: true })
+      .get(`${REACT_APP_API_URL}/members/get-member/${id}`, { withCredentials: true })
       .then(async (response) => {
         setData(response.data.member);
         setMember(response.data.member || response.data);
@@ -49,7 +49,7 @@ const MemberDetail = () => {
           // Update status in backend if not already inactive
           if (response.data.member?.status !== "Inactive") {
             await axios.post(
-              `${process.env.NEXT_PUBLIC_API_URL}/members/change-status/${id}`,
+              `${REACT_APP_API_URL}/members/change-status/${id}`,
               { status: "Inactive" },
               { withCredentials: true }
             );
@@ -70,7 +70,7 @@ const MemberDetail = () => {
     let statuss = status === "Active" ? "Inactive" : "Active";
     try {
       await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/members/change-status/${id}`,
+        `${REACT_APP_API_URL}/members/change-status/${id}`,
         { status: statuss },
         { withCredentials: true }
       );
@@ -95,7 +95,7 @@ const MemberDetail = () => {
 
   const handleRenewSaveBtn = async () => {
     await axios.put(
-      `${process.env.NEXT_PUBLIC_API_URL}/members/update-member-plan/${id}`,
+      `${REACT_APP_API_URL}/members/update-member-plan/${id}`,
       { membership: planMember },
       { withCredentials: true }
     )
@@ -106,7 +106,7 @@ const MemberDetail = () => {
 
         // Set status to Active after successful renew
         await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/members/change-status/${id}`,
+          `${REACT_APP_API_URL}/members/change-status/${id}`,
           { status: "Active" },
           { withCredentials: true }
         );
@@ -224,7 +224,7 @@ const MemberDetail = () => {
           onClick={async () => {
             if (window.confirm("Are you sure you want to delete this member?")) {
               try {
-                await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/members/${id}`, { withCredentials: true });
+                await axios.delete(`${REACT_APP_API_URL}/members/${id}`, { withCredentials: true });
                 toast.success("Member deleted successfully!");
                 setTimeout(() => {
                   navigate(-1); // Go back after deletion

@@ -28,7 +28,7 @@ const ForgotPassword = () => {
 
     const changePassword = async () => {
         setLoader(true);   
-        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/reset-password`, { email: inputField.email, newPassword: inputField.newPassword })
+        await axios.post(`${REACT_APP_API_URL}/auth/reset-password`, { email: inputField.email, newPassword: inputField.newPassword })
     .then((response) => {
         toast.success(response.data.message, {
             onClose: () => navigate('/'),
@@ -47,7 +47,7 @@ const ForgotPassword = () => {
     const sendOtp = async   () => {
         setLoader(true);
 
-        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/reset-password/sendOtp`, { email: inputField.email }).then((response) => {
+        await axios.post(`${REACT_APP_API_URL}/auth/reset-password/sendOtp`, { email: inputField.email }).then((response) => {
              setEmailSubmit(true);
             setContentvalue("Submit Your OTP ");
             toast.success(response.data.message);
@@ -63,7 +63,7 @@ const ForgotPassword = () => {
 
     const verifyOtp = async () => {
         setLoader(true);
-        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/reset-password/checkOtp`, { email: inputField.email, otp: inputField.otp }).then((response) => {
+        await axios.post(`${REACT_APP_API_URL}/auth/reset-password/checkOtp`, { email: inputField.email, otp: inputField.otp }).then((response) => {
             setOtpValidate(true);
             setContentvalue("Submit Yodur New Password");
             toast.success(response.data.message);
