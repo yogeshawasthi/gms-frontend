@@ -17,7 +17,7 @@ import Report from './Pages/Report/Report.js';
 
 function App() {
   const navigate = useNavigate();
-  const location = useLocation(); // Add this
+  const location = useLocation();
 
   const [isLogin, setIsLogin] = useState(false);
 
@@ -28,18 +28,16 @@ function App() {
     let isLogedIn = localStorage.getItem("isLogin");
     if (isLogedIn) {
       setIsLogin(true);
-      // Only redirect to dashboard if on login or root page
       if (location.pathname === "/" || location.pathname === "/login") {
         navigate("/dashboard");
       }
     } else {
       setIsLogin(false);
-      // Only redirect to login if not already there
       if (location.pathname !== "/") {
         navigate('/');
       }
     }
-  }, [localStorage.getItem("isLogin"), location.pathname]); // Add location.pathname as dependency
+  }, [localStorage.getItem("isLogin"), location.pathname]);
 
   const isSuperAdminPage = location.pathname.startsWith('/superadmin');
 
@@ -70,8 +68,6 @@ function App() {
           <Route path="/specific/:page" element={<GeneralUser />} />
           <Route path="/member/:id" element={<MemberDetail />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
-          <Route path="/superadmin" element={<SuperAdmin />} />
-          
           <Route path="/gym-report/:gymId" element={<GymReport />} />
         </Routes>
       </div>
