@@ -11,6 +11,7 @@ import VerifyEmail from './Pages/VerfiyEmail/verifyemail.js';
 import 'react-toastify/dist/ReactToastify.css';
 import SuperAdmin from './Pages/SuperAdmin/superadmin.js';
 import GymReport from './Pages/Report/GymReport.js';
+import SuperAdminLoginPage from "./Pages/SuperAdmin/SuperAdminLoginPage";
 import Report from './Pages/Report/Report.js';
 
 
@@ -69,6 +70,7 @@ function App() {
           <Route path="/member/:id" element={<MemberDetail />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/superadmin" element={<SuperAdmin />} />
+          <Route path="/superadmin/login" element={<SuperAdminLoginPage />} />
           <Route path="/gym-report/:gymId" element={<GymReport />} />
         </Routes>
       </div>

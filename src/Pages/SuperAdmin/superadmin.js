@@ -33,7 +33,13 @@ const SuperAdmin = () => {
           const pendingGyms = res.data.gyms.filter(gym => gym.status === "pending");
           setGyms(pendingGyms);
         })
-        .catch(() => toast.error("Failed to fetch gyms"));
+        .catch(err => {
+          if (err.response && err.response.status === 401) {
+            handleAuthError();
+          } else {
+            toast.error("Failed to fetch gyms");
+          }
+        });
     }
   }, [loggedIn, showApproved]);
 
@@ -96,6 +102,13 @@ const SuperAdmin = () => {
     } finally {
       setActionLoading(false);
     }
+  };
+
+  // Utility to handle 401 errors
+  const handleAuthError = () => {
+    localStorage.removeItem("isSuperAdmin");
+    setLoggedIn(false);
+    navigate("/superadmin/login");
   };
 
   if (!loggedIn) {
