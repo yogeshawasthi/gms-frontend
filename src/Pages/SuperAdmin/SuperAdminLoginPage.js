@@ -11,7 +11,7 @@ const SuperAdminLoginPage = () => {
 
   const handleLogin = async () => {
     try {
-      await axios.post(`${process.env.REACT_APP_API_URL}/superadmin/login`, { email, password }, { withCredentials: true });
+      await axios.post(`${process.env.REACT_APP_API_URL}/auth/superadmin/login`, { email, password }, { withCredentials: true });
       localStorage.setItem("isSuperAdmin", "true");
       toast.success("SuperAdmin logged in!");
       navigate("/superadmin");
