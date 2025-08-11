@@ -22,7 +22,7 @@ function App() {
   const [isLogin, setIsLogin] = useState(false);
 
   useEffect(() => {
-    // Allow superadmin page to be accessed without login
+    // Allow superadmin page to be accessed without login  you shut up 
     if (location.pathname.startsWith('/superadmin')) return;
 
     let isLogedIn = localStorage.getItem("isLogin");
